@@ -17,6 +17,7 @@
     <mapping resource="EstacionDB.Mappings.Ingreso.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.Egreso.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.VentaTurno.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.Cliente.hbm.xml" assembly="EstacionDB" />
   </session-factory>
 
 </hibernate-configuration>

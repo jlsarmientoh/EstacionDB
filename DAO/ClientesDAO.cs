@@ -5,6 +5,9 @@ using EstacionDB.VO;
 using System.Data.SqlClient;
 using EstacionDB.Exceptions;
 using EstacionDB.Helper;
+using NHibernate;
+using NHibernate.Criterion;
+using System.Collections;
 
 namespace EstacionDB.DAO
 {
@@ -17,6 +20,7 @@ namespace EstacionDB.DAO
             List<ClienteVO> clientes = new List<ClienteVO>();
             try
             {
+                /*
                 #region  se abre la conexión con la BD
                 conectar(Utilidades.Utilidades.appCadenaConexion);
                 #endregion
@@ -49,12 +53,25 @@ namespace EstacionDB.DAO
                 #endregion
 
                 desconectar();
+                 */
+
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(ClienteVO))
+                    .AddOrder(Order.Asc("Nombre"));
+
+                IList tmp = criteria.List();
+                foreach (ClienteVO cliente in tmp)
+                {
+                    clientes.Add(cliente);
+                }
+                ConnectionHelper.CloseSession();
+                
                 return clientes;
             
             }
             catch (System.Exception ex)
             {
-                desconectar();
+                //desconectar();
+                ConnectionHelper.CloseSession();
                 throw new EstacionDBException("Error al leer la información de la tabla clientes.",ex);                
             }
         }
