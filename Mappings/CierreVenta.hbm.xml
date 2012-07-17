@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.CierreVentasVO" table="CIERRE_VENTAS">
+    <id name="IdCierre">
+      <column name="ID_CIERRE" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>
+    <property name="TotalVentas">
+      <column name="TOTAL_VENTAS"/>
+    </property>
+    <property name="Creditos">
+      <column name="CREDITOS"/>
+    </property>
+    <property name="Efectivo">
+      <column name="EFECTIVO"/>
+    </property>
+    <property name="Sodexo">
+      <column name="SODEXO"/>
+    </property>
+    <property name="BigPass">
+      <column name="BIG_PASS"/>
+    </property>
+    <property name="Otros">
+      <column name="OTROS"/>
+    </property>
+    <property name="Tarjetas">
+      <column name="TARJETAS"/>
+    </property>
+    <property name="TarjetaPlus">
+      <column name="TARJETA_PLUS"/>
+    </property>
+    <property name="Isla">
+      <column name="ISLA"/>
+    </property>
+    <property name="Turno">
+      <column name="TURNO"/>
+    </property>    
+    <property name="CodEmpleado">
+      <column name="COD_EMPLEADO"/>
+    </property>
+  </class>
+</hibernate-mapping>

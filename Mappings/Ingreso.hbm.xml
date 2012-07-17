@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.IngresoVO" table="INGRESOS">
+    <id name="IdIngreso">
+      <column name="ID_INGRESO" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Documento">
+      <column name="TIPO_IDENTIFICACION"/>
+    </property>
+    <property name="NumConsignacion">
+      <column name="CONSIGNACION"/>
+    </property>
+    <property name="IdBanco">
+      <column name="ID_BANCO"/>
+    </property>
+    <property name="Valor">
+      <column name="VALOR"/>
+    </property>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>    
+  </class>
+</hibernate-mapping>

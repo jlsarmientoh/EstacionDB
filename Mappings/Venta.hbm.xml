@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.VentaVO" table="ViewVentas">
+    <id name="Tiquete">
+      <column name="Tiquete_Nro" sql-type="int" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>
+    <property name="Nit">
+      <column name="NIT"/>
+    </property>
+    <property name="Cliente">
+      <column name="Cliente"/>
+    </property>
+    <property name="Producto">
+      <column name="Producto"/>
+    </property>    
+    <property name="Placa">
+      <column name="Vehiculo_Placa"/>
+    </property>
+    <property name="Kilometraje">
+      <column name="KIL_ACT"/>
+    </property>
+    <property name="Total">
+      <column name="TOTAL"/>
+    </property>
+    <property name="Isla">
+      <column name="Isla"/>
+    </property>
+    <property name="Turno">
+      <column name="Turno"/>
+    </property>
+    <property name="CodEmpleado">
+      <column name="COD_EMP"/>
+    </property>
+    <property name="Galones">
+      <column name="CANTIDAD"/>
+    </property>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+
+  <!-- an ISessionFactory instance -->
+  <session-factory>
+
+    <!-- properties -->
+    <property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
+    <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+    <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+    <property name="connection.connection_string">data source=XPDESARROLLOXPS\SQLEXPRESS;initial catalog=Expo;integrated security=SSPI;persist security info=False;packet size=4096</property>
+    <property name="proxyfactory.factory_class">NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle</property>
+
+    <!-- mapping files -->    
+    <mapping resource="EstacionDB.Mappings.VentaExpo.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.CierreVenta.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.Ingreso.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.Egreso.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.VentaTurno.hbm.xml" assembly="EstacionDB" />
+  </session-factory>
+
+</hibernate-configuration>
+

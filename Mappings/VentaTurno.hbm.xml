@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.VentaTurnoVO" table="VENTAS_TURNO">
+    <id name="Tiquete">
+      <column name="TIQUETE" sql-type="bigint" not-null="true"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>
+    <property name="Producto">
+      <column name="PRODUCTO"/>
+    </property>
+    <property name="Total">
+      <column name="TOTAL"/>
+    </property>
+    <property name="Isla">
+      <column name="ISLA"/>
+    </property>
+    <property name="Turno">
+      <column name="TURNO"/>
+    </property>
+    <property name="CodEmpleado">
+      <column name="COD_EMPLEADO"/>
+    </property>
+    <property name="Galones">
+      <column name="GALONES"/>
+    </property>
+  </class>
+</hibernate-mapping>
