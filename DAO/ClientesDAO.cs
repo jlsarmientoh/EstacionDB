@@ -13,48 +13,11 @@ namespace EstacionDB.DAO
 {
     public class ClientesDAO
     {
-        private SqlConnection con;
-
         public List<ClienteVO> consultarClientes()
         {
             List<ClienteVO> clientes = new List<ClienteVO>();
             try
             {
-                /*
-                #region  se abre la conexión con la BD
-                conectar(Utilidades.Utilidades.appCadenaConexion);
-                #endregion
-
-                #region se preparan los objetos para hacer la consulta y leerla
-                SqlDataReader reader = null;
-                SqlCommand query = new SqlCommand("SELECT [ID_CLIENTE],[TIPO_ID],[IDENTIFICACION],[NOMBRE],[DIRECCION],[TELEFONO],[CONTACTO],[EMAIL] FROM [CLIENTES] ORDER BY NOMBRE", con);
-                #endregion
-
-                #region se ejecuta el query, se lee el resultado y se procesa en el VO;
-                reader = query.ExecuteReader();
-                if (reader != null)
-                {
-                    // Si tiene reaultados los recorre fila por fila
-                    while (reader.Read())
-                    {
-                        ClienteVO tmpCliente = new ClienteVO();
-                        if (reader["ID_CLIENTE"] != null) tmpCliente.IdCliente = long.Parse(reader["ID_CLIENTE"].ToString());
-                        if (reader["TIPO_ID"] != null) tmpCliente.TipoId = long.Parse(reader["TIPO_ID"].ToString());
-                        if (reader["IDENTIFICACION"] != null) tmpCliente.Identificacion = reader["IDENTIFICACION"].ToString();
-                        if (reader["NOMBRE"] != null) tmpCliente.Nombre = reader["NOMBRE"].ToString();
-                        if (reader["DIRECCION"] != null) tmpCliente.Direccion = reader["DIRECCION"].ToString();
-                        if (reader["TELEFONO"] != null) tmpCliente.Telefono = reader["TELEFONO"].ToString();
-                        if (reader["CONTACTO"] != null) tmpCliente.Contacto = reader["CONTACTO"].ToString();
-                        if (reader["EMAIL"] != null) tmpCliente.Email = reader["EMAIL"].ToString();
-
-                        clientes.Add(tmpCliente);
-                    }
-                }
-                #endregion
-
-                desconectar();
-                 */
-
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(ClienteVO))
                     .AddOrder(Order.Asc("Nombre"));
 
@@ -70,7 +33,6 @@ namespace EstacionDB.DAO
             }
             catch (System.Exception ex)
             {
-                //desconectar();
                 ConnectionHelper.CloseSession();
                 throw new EstacionDBException("Error al leer la información de la tabla clientes.",ex);                
             }
@@ -81,140 +43,55 @@ namespace EstacionDB.DAO
             ClienteVO tmpCliente = null;
             try
             {
-                #region  se abre la conexión con la BD
-                conectar(Utilidades.Utilidades.appCadenaConexion);
-                #endregion
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(ClienteVO))
+                    .Add(Expression.Eq("Id", idCliente));
 
-                #region se preparan los objetos para hacer la consulta y leerla
-                SqlDataReader reader = null;
-                SqlCommand query = new SqlCommand("SELECT [ID_CLIENTE],[TIPO_ID],[IDENTIFICACION],[NOMBRE],[DIRECCION],[TELEFONO],[CONTACTO],[EMAIL] FROM [CLIENTES] WHERE [ID_CLIENTE] = " + idCliente, con);
-                #endregion
+                tmpCliente = criteria.UniqueResult<ClienteVO>();
 
-                #region se ejecuta el query, se lee el resultado y se procesa en el VO;
-                reader = query.ExecuteReader();
-                if (reader != null)
-                {
-                    // Si tiene reaultados los recorre fila por fila
-                    while (reader.Read())
-                    {
-                        tmpCliente = new ClienteVO();
-                        if (reader["ID_CLIENTE"] != null) tmpCliente.IdCliente = long.Parse(reader["ID_CLIENTE"].ToString());
-                        if (reader["TIPO_ID"] != null) tmpCliente.TipoId = long.Parse(reader["TIPO_ID"].ToString());
-                        if (reader["IDENTIFICACION"] != null) tmpCliente.Identificacion = reader["IDENTIFICACION"].ToString();
-                        if (reader["NOMBRE"] != null) tmpCliente.Nombre = reader["NOMBRE"].ToString();
-                        if (reader["DIRECCION"] != null) tmpCliente.Direccion = reader["DIRECCION"].ToString();
-                        if (reader["TELEFONO"] != null) tmpCliente.Telefono = reader["TELEFONO"].ToString();
-                        if (reader["CONTACTO"] != null) tmpCliente.Contacto = reader["CONTACTO"].ToString();
-                        if (reader["EMAIL"] != null) tmpCliente.Email = reader["EMAIL"].ToString();
-
-                    }
-                }
-                #endregion
-
-                desconectar();
+                ConnectionHelper.CloseSession();
+                
                 return tmpCliente;
 
             }
             catch (System.Exception ex)
             {
-                desconectar();
+                ConnectionHelper.CloseSession();
                 throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);                
             }
         }
 
         public int guardarCliente(ClienteVO cliente)
         {
+            int rows = 0;
+            ITransaction tx = null;
             try
             {
-                #region  se abre la conexión con la BD
-                conectar(Utilidades.Utilidades.appCadenaConexion);
-                #endregion
-
-                #region se preparan los objetos para hacer el inserto o el update dependiendo del atibuto idCliente, si es = 0 insert; si es != 0 update                
-                SqlCommand query = null;
+                ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
+                tx = session.BeginTransaction();
                 if (cliente.IdCliente == 0)
                 {
-                    query = new SqlCommand("INSERT INTO [CLIENTES] " +
-                    "([TIPO_ID]" +
-                    ",[IDENTIFICACION]" +
-                    ",[NOMBRE]" +
-                    ",[DIRECCION]" +
-                    ",[TELEFONO]" +
-                    ",[CONTACTO]" +
-                    ",[EMAIL]) " +
-                    "VALUES(" + cliente.TipoId +
-                    ",'" + cliente.Identificacion +
-                    "','" + cliente.Nombre +
-                    "','" + cliente.Direccion +
-                    "','" + cliente.Telefono +
-                    "','" + cliente.Contacto +
-                    "','" + cliente.Email + "')", con);
+                    session.Save(cliente);
                 }
                 else
                 {
-                    query = new SqlCommand("UPDATE [CLIENTES] SET " +
-                     "[TIPO_ID] = " + cliente.TipoId +
-                     ",[IDENTIFICACION] = '" + cliente.Identificacion +
-                     "',[NOMBRE] = '" + cliente.Nombre +
-                     "',[DIRECCION] = '" + cliente.Direccion +
-                     "',[TELEFONO] = '" + cliente.Telefono +
-                     "',[CONTACTO] = '" + cliente.Contacto +
-                     "',[EMAIL] = '" + cliente.Email + "'" +
-                     " WHERE [ID_CLIENTE] = " + cliente.IdCliente , con);
+                    session.Update(cliente);
                 }
                 
-                #endregion
+                rows++;
+                tx.Commit();
 
-                #region se ejecuta el query, se lee el resultado
-                int rows = query.ExecuteNonQuery();                
-                #endregion
+                ConnectionHelper.CloseSession();
 
-                desconectar();
                 return rows;
-
             }
             catch (System.Exception ex)
             {
-                desconectar();
+                if (tx != null)
+                {
+                    tx.Rollback();
+                }
+                ConnectionHelper.CloseSession();
                 throw new EstacionDBException("Error al leer la información de la tabla clientes.", ex);
-            }
-        }
-
-        private void conectar(string conectionString)
-        {
-            try
-            {
-                if (con == null)
-                {
-                    if (conectionString != null)
-                    {
-                        con = ConnectionHelper.createConecction(conectionString);
-                    }
-                    else
-                    {
-                        con = ConnectionHelper.createDafaultConnection();
-                    }
-                }
-                con.Open();
-            }
-            catch (System.Exception e)
-            {
-                throw new EstacionDBException("Ha ocurrido un error al abrir la conexión con la base de datos", e);
-            }
-        }
-
-        private void desconectar()
-        {
-            try
-            {
-                if (con != null)
-                {
-                    con.Close();
-                }
-            }
-            catch (System.Exception e)
-            {
-                throw new EstacionDBException("Ha ocurrido un error al cerrar la conexión con la base de datos", e);
             }
         }
     }
