@@ -110,5 +110,13 @@ namespace EstacionDB.VO
             get { return tarjetaPlus; }
             set { tarjetaPlus = value; }
         }
+
+        private double ticketTronik = 0;
+
+        public virtual double TicketTronik
+        {
+            get { return ticketTronik; }
+            set { ticketTronik = value; }
+        }
     }
 }

@@ -41,5 +41,8 @@
     <property name="CodEmpleado">
       <column name="COD_EMPLEADO"/>
     </property>
+    <property name="TicketTronik">
+      <column name="TICKET_TRONIK"/>
+    </property>
   </class>
 </hibernate-mapping>
