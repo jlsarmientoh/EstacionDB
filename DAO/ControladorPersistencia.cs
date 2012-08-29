@@ -19,6 +19,7 @@ namespace EstacionDB.DAO
         private EgresosDAO egresosDAO = null;
         private CierreVentasDAO cierreVentasDAO = null;
         private EmpleadoDAO empleadosDAO = null;
+        private ProductosTurnoDAO productosTurnoDAO = null;
         #endregion
         #region métodos para obtener instancias de los DAO's
         private VentasDAO getVentasDAO()
@@ -100,6 +101,15 @@ namespace EstacionDB.DAO
                 empleadosDAO = new EmpleadoDAO();
             }
             return empleadosDAO;
+        }
+
+        private ProductosTurnoDAO getProductosTurnoDAO()
+        {
+            if (productosTurnoDAO == null)
+            {
+                productosTurnoDAO = new ProductosTurnoDAO();
+            }
+            return productosTurnoDAO;
         }
         #endregion
 
@@ -445,6 +455,44 @@ namespace EstacionDB.DAO
             try
             {
                 return getVentasDAO().guardarVentasTurno(ventas);
+            }
+            catch (Exception ex)
+            {
+                throw new EstacionDBException("Error en la actualizacion de las ventas en DB app.", ex);
+            }
+        }
+
+        public List<ProductoTurnoVO> consultarProductosTurno(DateTime fecha1, DateTime fecha2, long isla, long turno)
+        {
+            try
+            {
+                int[] islas = null;
+                switch (isla)
+                {
+                    case 1:
+                        {
+                            islas = new int[] { 1, 2 };
+                            break;
+                        }
+                    case 2:
+                        {
+                            islas = new int[] { 3, 4 };
+                            break;
+                        }
+                }
+                return getProductosTurnoDAO().consultarProductosTurno(islas, turno, fecha1, fecha2);
+            }
+            catch (Exception ex)
+            {
+                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+            }
+        }
+
+        public int guardarProductosTurno(List<ProductoTurnoVO> productosTurno)
+        {
+            try
+            {
+                return getProductosTurnoDAO().guardarProductosTurno(productosTurno);
             }
             catch (Exception ex)
             {

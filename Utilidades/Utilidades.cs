@@ -24,6 +24,7 @@ namespace EstacionDB.Utilidades
         public static int codigoDiesel;
         public static string grupo1;
         public static string grupo2;
+        public static int multiplicarX;
     }
 
 }

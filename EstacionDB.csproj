@@ -65,6 +65,7 @@
     <Compile Include="DAO\EmpleadoDAO.cs" />
     <Compile Include="DAO\IngresosDAO.cs" />
     <Compile Include="DAO\LecturasDAO.cs" />
+    <Compile Include="DAO\ProductosTurnoDAO.cs" />
     <Compile Include="DAO\TipoIdDAO.cs" />
     <Compile Include="DAO\VentasDAO.cs" />
     <Compile Include="Exceptions\CierreException.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="VO\IngresoVO.cs" />
     <Compile Include="VO\LecturaVO.cs" />
     <Compile Include="VO\ModoPagoVO.cs" />
+    <Compile Include="VO\ProductoTurnoVO.cs" />
     <Compile Include="VO\TipoIdVO.cs" />
     <Compile Include="VO\VentaTurnoVO.cs" />
     <Compile Include="VO\VentaVO.cs" />
@@ -129,6 +131,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mappings\Cliente.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\ProductoTurno.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mappings\ProductoTurnoExpo.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

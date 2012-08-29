@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.ProductoTurnoVO" table="PRODUCTOS_TURNO">
+    <id name="Id">
+      <column name="Id" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Fecha">
+      <column name="Fecha"/>
+    </property>
+    <property name="Valor">
+      <column name="Valor"/>
+    </property>
+    <property name="Isla">
+      <column name="Isla"/>
+    </property>
+    <property name="Producto">
+      <column name="Producto"/>
+    </property>
+    <property name="Turno">
+      <column name="Turno"/>
+    </property>
+    <property name="Galones">
+      <column name="Galones"/>
+    </property>
+  </class>
+</hibernate-mapping>
+
