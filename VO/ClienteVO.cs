@@ -62,5 +62,13 @@ namespace EstacionDB.VO
             get { return email; }
             set { email = value; }
         }
+
+        private string codigo;
+
+        public virtual string Codigo
+        {
+            get { return codigo; }
+            set { codigo = value; }
+        }
     }
 }

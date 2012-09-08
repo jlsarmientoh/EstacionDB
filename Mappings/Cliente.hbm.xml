@@ -25,6 +25,9 @@
     </property>
     <property name="Email">
       <column name="EMAIL"/>
-    </property>    
+    </property>
+    <property name="Codigo">
+      <column name="CODIGO"/>
+    </property>
   </class>
 </hibernate-mapping>
