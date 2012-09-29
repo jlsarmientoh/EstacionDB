@@ -5,6 +5,7 @@ using EstacionDB.Exceptions;
 using EstacionDB.VO;
 using System.Collections;
 using EstacionDB.DTO;
+using System.Globalization;
 
 namespace EstacionDB.DAO
 {
@@ -155,7 +156,7 @@ namespace EstacionDB.DAO
         {
             try
             {
-                int[] islas = null;
+                int[] islas = null;                
                 switch (isla)
                 {
                     case 1:
@@ -220,7 +221,8 @@ namespace EstacionDB.DAO
                     mc.Nit = nitDto.Nit;
                     mc.Cuenta = Utilidades.Utilidades.CuentaCredito;
                     mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                    mc.Valor = String.Format("{0,10:#,0.00}", vc.Total);
+                    //mc.Valor = String.Format("{0,10:#,0.00}", vc.Total);
+                    mc.Valor = vc.Total.ToString("0.00", CultureInfo.InvariantCulture);
                     mc.CentroCosto = "";
                     movimientos.Add(mc);
                 }
@@ -233,7 +235,7 @@ namespace EstacionDB.DAO
                 mc1.Nit = "";
                 mc1.Cuenta = Utilidades.Utilidades.CuentaEfectivo;
                 mc1.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc1.Valor = String.Format("{0,10:#,0.00}", cv.Efectivo);
+                mc1.Valor = cv.Efectivo.ToString("0.00", CultureInfo.InvariantCulture);
                 mc1.CentroCosto = "";
                 movimientos.Add(mc1);
 
@@ -245,7 +247,7 @@ namespace EstacionDB.DAO
                 mc2.Nit = Utilidades.Utilidades.NitSodexo;
                 mc2.Cuenta = Utilidades.Utilidades.CuentaSodexo;
                 mc2.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc2.Valor = String.Format("{0,10:#,0.00}", cv.Sodexo);
+                mc2.Valor = cv.Sodexo.ToString("0.00", CultureInfo.InvariantCulture);
                 mc2.CentroCosto = "";
                 movimientos.Add(mc2);
 
@@ -257,7 +259,7 @@ namespace EstacionDB.DAO
                 mc3.Nit = Utilidades.Utilidades.NitBigPass;
                 mc3.Cuenta = Utilidades.Utilidades.CuentaBigPass;
                 mc3.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc3.Valor = String.Format("{0,10:#,0.00}", cv.BigPass);
+                mc3.Valor = cv.BigPass.ToString("0.00", CultureInfo.InvariantCulture);
                 mc3.CentroCosto = "";
                 movimientos.Add(mc3);
 
@@ -269,9 +271,9 @@ namespace EstacionDB.DAO
                 mc4.Nit = "";
                 mc4.Cuenta = Utilidades.Utilidades.CuentaTarjetas;
                 mc4.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc4.Valor = String.Format("{0,10:#,0.00}", cv.Tarjetas);
+                mc4.Valor = cv.Tarjetas.ToString("0.00", CultureInfo.InvariantCulture);
                 mc4.CentroCosto = "";
-                movimientos.Add(mc3);
+                movimientos.Add(mc4);
 
                 // Movimiento contable para Tarjeta Plus
                 MovimientoContableDTO mc5 = new MovimientoContableDTO();
@@ -281,7 +283,7 @@ namespace EstacionDB.DAO
                 mc5.Nit = Utilidades.Utilidades.NitEDS;
                 mc5.Cuenta = Utilidades.Utilidades.CuentaTarjetaPlus;
                 mc5.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc5.Valor = String.Format("{0,10:#,0.00}", cv.TarjetaPlus);
+                mc5.Valor = cv.TarjetaPlus.ToString("0.00", CultureInfo.InvariantCulture);
                 mc5.CentroCosto = "";
                 movimientos.Add(mc5);
 
@@ -293,7 +295,7 @@ namespace EstacionDB.DAO
                 mc6.Nit = Utilidades.Utilidades.NitTicketTronik;
                 mc6.Cuenta = Utilidades.Utilidades.CuentaTicketTronik;
                 mc6.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc6.Valor = String.Format("{0,10:#,0.00}", cv.TicketTronik);
+                mc6.Valor = cv.TicketTronik.ToString("0.00", CultureInfo.InvariantCulture);
                 mc6.CentroCosto = "";
                 movimientos.Add(mc6);
 
@@ -305,7 +307,7 @@ namespace EstacionDB.DAO
                 mc7.Nit = Utilidades.Utilidades.NitEDS;
                 mc7.Cuenta = Utilidades.Utilidades.CuentaOtros;
                 mc7.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                mc7.Valor = String.Format("{0,10:#,0.00}", cv.Otros);
+                mc7.Valor = cv.Otros.ToString("0.00", CultureInfo.InvariantCulture);
                 mc7.CentroCosto = "";
                 movimientos.Add(mc7);
                 #endregion
@@ -335,7 +337,7 @@ namespace EstacionDB.DAO
                 foreach (ProductoTurnoVO pt in productos)
                 {
                     
-                    if (pt.Producto.Equals("CORRIENTE"))
+                    if (pt.Producto.Trim().Equals("CORRIENTE"))
                     {
                         MovimientoContableDTO mcs = new MovimientoContableDTO();
                         mcs.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
@@ -345,7 +347,7 @@ namespace EstacionDB.DAO
                         mcs.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
                         mcs.Cuenta = Utilidades.Utilidades.CuentaSobretasaCorriente;
                         subtotalSobretasaCorriente = pt.Galones * sobretasaCorriente;
-                        mcs.Valor = String.Format("{0,10:#,0.00}", subtotalSobretasaCorriente);
+                        mcs.Valor = subtotalSobretasaCorriente.ToString("0.00", CultureInfo.InvariantCulture);
                         mcs.CentroCosto = "";
                         movimientos.Add(mcs);
 
@@ -355,12 +357,13 @@ namespace EstacionDB.DAO
                         mcn.Doc = doc;
                         mcn.Nit = Utilidades.Utilidades.NitEDS;
                         mcn.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
-                        mcn.Cuenta = Utilidades.Utilidades.CuentaVentaCorriente;                        
-                        mcn.Valor = String.Format("{0,10:#,0.00}", (pt.Valor - subtotalSobretasaCorriente));
+                        mcn.Cuenta = Utilidades.Utilidades.CuentaVentaCorriente;
+                        double diffsub = pt.Valor - subtotalSobretasaCorriente;
+                        mcn.Valor = diffsub.ToString("0.00", CultureInfo.InvariantCulture);
                         mcn.CentroCosto = "0901";
                         movimientos.Add(mcn);
                     }
-                    else if (pt.Producto.Equals("SUPER"))
+                    else if (pt.Producto.Trim().Equals("SUPER"))
                     {
                         MovimientoContableDTO mcs = new MovimientoContableDTO();
                         mcs.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
@@ -370,7 +373,7 @@ namespace EstacionDB.DAO
                         mcs.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
                         mcs.Cuenta = Utilidades.Utilidades.CuentaSobretasaSuper;
                         subtotalSobretasaSuper = pt.Galones * sobretasaSuper;
-                        mcs.Valor = String.Format("{0,10:#,0.00}", subtotalSobretasaSuper);
+                        mcs.Valor = subtotalSobretasaSuper.ToString("0.00", CultureInfo.InvariantCulture);
                         mcs.CentroCosto = "";
                         movimientos.Add(mcs);
 
@@ -381,11 +384,12 @@ namespace EstacionDB.DAO
                         mcn.Nit = Utilidades.Utilidades.NitEDS;
                         mcn.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
                         mcn.Cuenta = Utilidades.Utilidades.CuentaVentaSuper;
-                        mcn.Valor = String.Format("{0,10:#,0.00}", (pt.Valor - subtotalSobretasaSuper));
+                        double diffsub1 = pt.Valor - subtotalSobretasaSuper;
+                        mcn.Valor = diffsub1.ToString("0.00", CultureInfo.InvariantCulture);
                         mcn.CentroCosto = "0901";
                         movimientos.Add(mcn);
                     }
-                    else if (pt.Producto.Equals("DIESEL"))
+                    else if (pt.Producto.Trim().Equals("DIESEL"))
                     {
                         MovimientoContableDTO mcs = new MovimientoContableDTO();
                         mcs.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
@@ -395,7 +399,7 @@ namespace EstacionDB.DAO
                         mcs.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
                         mcs.Cuenta = Utilidades.Utilidades.CuentaSobretasaDiesel;
                         subtotalSobretasaDiesel = pt.Galones * sobretasaDiesel;
-                        mcs.Valor = String.Format("{0,10:#,0.00}", subtotalSobretasaDiesel);
+                        mcs.Valor = subtotalSobretasaDiesel.ToString("0.00", CultureInfo.InvariantCulture);
                         mcs.CentroCosto = "";
                         movimientos.Add(mcs);
 
@@ -406,7 +410,8 @@ namespace EstacionDB.DAO
                         mcn.Nit = Utilidades.Utilidades.NitEDS;
                         mcn.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
                         mcn.Cuenta = Utilidades.Utilidades.CuentaVentaDiesel;
-                        mcn.Valor = String.Format("{0,10:#,0.00}", (pt.Valor - subtotalSobretasaDiesel));
+                        double diffsub2 = pt.Valor - subtotalSobretasaDiesel;
+                        mcn.Valor = diffsub2.ToString("0.00", CultureInfo.InvariantCulture);
                         mcn.CentroCosto = "0901";
                         movimientos.Add(mcn);
                     }
@@ -419,16 +424,17 @@ namespace EstacionDB.DAO
                 {
                     if (mcDto.Naturaleza.Equals(Utilidades.Utilidades.NatutalezaCredito))
                     {
-                        totalCreditos += double.Parse(mcDto.Valor);
+                        totalCreditos += double.Parse(mcDto.Valor, CultureInfo.InvariantCulture);
                     }
                     else if (mcDto.Naturaleza.Equals(Utilidades.Utilidades.NatutalezaDebito))
                     {
-                        totalDebitos += double.Parse(mcDto.Valor);
+                        totalDebitos += double.Parse(mcDto.Valor, CultureInfo.InvariantCulture);
                     }
                 }
 
                 if (totalCreditos > totalDebitos)
                 {
+                    double diff1 = totalCreditos - totalDebitos;
                     MovimientoContableDTO mca = new MovimientoContableDTO();
                     mca.Fecha = fecha1.ToString("dd/MM/yyyy");
                     mca.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
@@ -436,12 +442,13 @@ namespace EstacionDB.DAO
                     mca.Nit = Utilidades.Utilidades.NitEDS;
                     mca.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                     mca.Cuenta = Utilidades.Utilidades.CuentaAjuste;
-                    mca.Valor = String.Format("{0,10:#,0.00}", (totalCreditos - totalDebitos));
-                    mca.CentroCosto = "";
+                    mca.Valor = diff1.ToString("0.00", CultureInfo.InvariantCulture);
+                    mca.CentroCosto = "0901";
                     movimientos.Add(mca);
                 }
                 else if (totalDebitos > totalCreditos)
                 {
+                    double diff = totalDebitos - totalCreditos;
                     MovimientoContableDTO mca = new MovimientoContableDTO();
                     mca.Fecha = fecha1.ToString("dd/MM/yyyy");
                     mca.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
@@ -449,8 +456,8 @@ namespace EstacionDB.DAO
                     mca.Nit = Utilidades.Utilidades.NitEDS;
                     mca.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
                     mca.Cuenta = Utilidades.Utilidades.CuentaAjuste;
-                    mca.Valor = String.Format("{0,10:#,0.00}", (totalDebitos - totalCreditos));
-                    mca.CentroCosto = "";
+                    mca.Valor = diff.ToString("0.00", CultureInfo.InvariantCulture);
+                    mca.CentroCosto = "0901";
                     movimientos.Add(mca);
                 }
                 #endregion

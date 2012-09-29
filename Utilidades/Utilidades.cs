@@ -49,25 +49,41 @@ namespace EstacionDB.Utilidades
         public static NitDTO formatearNit(String nit)
         {
             NitDTO resultado = new NitDTO();
+            string numericalNit;
 
-            if (nit.Length <= 9)
+            StringBuilder origin = new StringBuilder();
+            char[] charArray = nit.ToCharArray();
+
+            // se tienen en cuenta solo los digitos numéricos
+            foreach(char c in charArray)
             {
-                resultado.Nit = nit;
+                int flag;
+                if(!c.Equals('-') && !c.Equals(','))
+                {
+                    origin.Append(c);
+                }
+            }
+            
+            numericalNit = origin.ToString();
+
+            if (numericalNit.Length <= 9)
+            {
+                resultado.Nit = numericalNit;
                 resultado.DigitoVerfificacion = "0";
                 resultado.Codigo = "0";
             }
 
-            if (nit.Length > 9) //Cuando se tiene el nit y el digito de verificacion en el mismo campo
+            if (numericalNit.Length > 9) //Cuando se tiene el nit y el digito de verificacion en el mismo campo
             {
-                resultado.Nit = nit.Substring(0, 9);
-                resultado.DigitoVerfificacion = nit.Substring(9, 1);
+                resultado.Nit = numericalNit.Substring(0, 9);
+                resultado.DigitoVerfificacion = numericalNit.Substring(9, 1);
                 resultado.Codigo = "0";
             }
-            if (nit.Length > 10) //Cuando ademas se tienen consecutivos adicionales
+            if (numericalNit.Length > 10) //Cuando ademas se tienen consecutivos adicionales
             {
-                resultado.Nit = nit.Substring(0, 9);
-                resultado.DigitoVerfificacion = nit.Substring(9, 1);
-                resultado.Codigo = nit.Substring(10, (nit.Length - 10));
+                resultado.Nit = numericalNit.Substring(0, 9);
+                resultado.DigitoVerfificacion = numericalNit.Substring(9, 1);
+                resultado.Codigo = numericalNit.Substring(10, (numericalNit.Length - 10));
             }
 
             return resultado;

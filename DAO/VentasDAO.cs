@@ -31,6 +31,14 @@ namespace EstacionDB.DAO
                 foreach (VentaVO venta in tmp)
                 {
                     venta.ModoPago = 7;
+                    if (venta.Isla == 1 || venta.Isla == 2)
+                    {
+                        venta.Isla = 1;
+                    }
+                    else if (venta.Isla == 3 || venta.Isla == 4)
+                    {
+                        venta.Isla = 2;
+                    }
                     ventas.Add(venta);
                 }
                 
@@ -61,6 +69,14 @@ namespace EstacionDB.DAO
                 foreach (VentaVO venta in tmp)
                 {
                     venta.ModoPago = 0;
+                    if (venta.Isla == 1 || venta.Isla == 2)
+                    {
+                        venta.Isla = 1;
+                    }
+                    else if (venta.Isla == 3 || venta.Isla == 4)
+                    {
+                        venta.Isla = 2;
+                    }
                     ventas.Add(venta);
                 }
 
@@ -130,6 +146,15 @@ namespace EstacionDB.DAO
                     .Add(Expression.Eq("Tiquete", nroTiquete));
                 
                 tmpVenta = criteria.UniqueResult<VentaVO>();
+
+                if (tmpVenta.Isla == 1 || tmpVenta.Isla == 2)
+                {
+                    tmpVenta.Isla = 1;
+                }
+                else if (tmpVenta.Isla == 3 || tmpVenta.Isla == 4)
+                {
+                    tmpVenta.Isla = 2;
+                }
                 
                 ConnectionHelper.CloseSession();
 
@@ -154,6 +179,15 @@ namespace EstacionDB.DAO
                     .Add(Expression.In("Isla", isla));
 
                 tmpVenta = criteria.UniqueResult<VentaVO>();
+
+                if (tmpVenta.Isla == 1 || tmpVenta.Isla == 2)
+                {
+                    tmpVenta.Isla = 1;
+                }
+                else if (tmpVenta.Isla == 3 || tmpVenta.Isla == 4)
+                {
+                    tmpVenta.Isla = 2;
+                }
 
                 ConnectionHelper.CloseSession();
 
