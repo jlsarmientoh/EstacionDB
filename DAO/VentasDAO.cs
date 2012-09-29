@@ -277,6 +277,38 @@ namespace EstacionDB.DAO
             }
         }
 
+        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2)
+        {
+            List<VentaVO> ventas = new List<VentaVO>();
+            try
+            {
+                string sqlQuery = "Select v.Fecha, v.Nit, sum(v.Total) From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 Group By v.Fecha, v.Nit";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                IList tmp = query.List();
+                
+                foreach (object[] venta in tmp)
+                {
+                   VentaVO v = new VentaVO();
+                   v.Fecha = DateTime.Parse(venta[0].ToString());
+                   v.Nit = venta[1].ToString();
+                   v.Total = double.Parse(venta[2].ToString());
+                   ventas.Add(v);                
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return ventas;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+
+            }
+        }
+
         private void conectar(string conectionString)
         {
             try

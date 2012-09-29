@@ -15,6 +15,7 @@
     <mapping resource="EstacionDB.Mappings.Empleado.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.Venta.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.ProductoTurno.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.ClienteServP.hbm.xml" assembly="EstacionDB" />
   </session-factory>
 
 </hibernate-configuration>

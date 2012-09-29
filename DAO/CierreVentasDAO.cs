@@ -27,10 +27,7 @@ namespace EstacionDB.DAO
 
                 IList tmp = criteria.List();
 
-                total = tmp.Count;
-                /*                
-                "SELECT COUNT(ID_CIERRE) AS ID_CIERRE FROM CIERRE_VENTAS WHERE FECHA BETWEEN '" + fecha1.ToString("dd-MM-yyyy") + "' AND '" + fecha2.ToString("dd-MM-yyyy") + "' AND [ISLA] = " + isla + " AND [TURNO] = " + turno + " AND [COD_EMPLEADO] = " + codEmpleado                
-                 */
+                total = tmp.Count;                
                 ConnectionHelper.CloseSession();
 
                 return total;
@@ -85,6 +82,45 @@ namespace EstacionDB.DAO
             {
                 ConnectionHelper.CloseSession();
                 throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+            }
+        }
+
+        public List<CierreVentasVO> consultarCierresAgrupados(DateTime fecha1, DateTime fecha2)
+        {
+            List<CierreVentasVO> cierresVenta = new List<CierreVentasVO>();
+            try
+            {
+                string sqlQuery = "Select v.Fecha, sum(v.TotalVentas), sum(v.Creditos), sum(v.Efectivo), sum(v.Sodexo), sum(v.BigPass), sum(v.Otros), sum(v.Tarjetas), sum(v.TarjetaPlus), sum(v.TicketTronik) From EstacionDB.VO.CierreVentasVO v Where Fecha Between :Fecha1 And :Fecha2 Group By v.Fecha";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                IList tmp = query.List();
+
+                foreach (object[] cierre in tmp)
+                {
+                    CierreVentasVO cv= new CierreVentasVO();
+                    cv.Fecha = DateTime.Parse(cierre[0].ToString());
+                    cv.TotalVentas = double.Parse(cierre[1].ToString());
+                    cv.Creditos = double.Parse(cierre[2].ToString());
+                    cv.Efectivo = double.Parse(cierre[3].ToString());
+                    cv.Sodexo = double.Parse(cierre[4].ToString());
+                    cv.BigPass = double.Parse(cierre[5].ToString());
+                    cv.Otros = double.Parse(cierre[6].ToString());
+                    cv.Tarjetas = double.Parse(cierre[7].ToString());
+                    cv.TarjetaPlus = double.Parse(cierre[8].ToString());
+                    cv.TicketTronik = double.Parse(cierre[9].ToString());
+                    cierresVenta.Add(cv);
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return cierresVenta;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+
             }
         }
     }

@@ -116,6 +116,39 @@ namespace EstacionDB.DAO
              */ 
         }
 
+        public List<ProductoTurnoVO> consultarProductosAgrupados(DateTime fecha1, DateTime fecha2)
+        {
+            List<ProductoTurnoVO> productos = new List<ProductoTurnoVO>();
+            try
+            {
+                string sqlQuery = "Select v.Fecha, v.Producto, sum(v.Galones), sum(v.Valor) From EstacionDB.VO.ProductoTurnoVO v Where Fecha Between :Fecha1 And :Fecha2 Group By v.Fecha, v.Producto";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                IList tmp = query.List();
+
+                foreach (object[] producto in tmp)
+                {
+                    ProductoTurnoVO p = new ProductoTurnoVO();
+                    p.Fecha = DateTime.Parse(producto[0].ToString());
+                    p.Producto = producto[1].ToString();
+                    p.Galones = double.Parse(producto[2].ToString());
+                    p.Valor = double.Parse(producto[3].ToString());
+                    productos.Add(p);
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return productos;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla Productos_turno Expo.", ex);
+
+            }
+        }
+
         public int guardarProductosTurno(List<ProductoTurnoVO> productosTurno)
         {
             int rows = 0;

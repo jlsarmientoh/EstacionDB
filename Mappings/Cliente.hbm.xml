@@ -29,5 +29,8 @@
     <property name="Codigo">
       <column name="CODIGO"/>
     </property>
+    <property name="Consecutivo">
+      <column name="CONSECUTIVO"/>
+    </property>
   </class>
 </hibernate-mapping>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using EstacionDB.DTO;
 
 namespace EstacionDB.Utilidades
 {
@@ -15,16 +16,62 @@ namespace EstacionDB.Utilidades
         public static string nombreTablaEmpleados;
         public static string rutaPrincipalExport;        
         public static string separador;
-        public static bool usarEncabezados;
-        public static double sobretasaSuper;
-        public static double sobretasaCorriente;
-        public static double sobretasaDiesel;
+        public static bool usarEncabezados;        
         public static int codigoSuper;
         public static int codigoCorriente;
         public static int codigoDiesel;
         public static string grupo1;
         public static string grupo2;
         public static int multiplicarX;
+        public static string TipoMovimiento;
+        public static string NatutalezaDebito;
+        public static string NatutalezaCredito;
+        public static string NitEDS;
+        public static string NitSodexo;
+        public static string NitBigPass;
+        public static string NitTicketTronik;
+        public static string CuentaCredito;
+        public static string CuentaEfectivo;
+        public static string CuentaSodexo;
+        public static string CuentaBigPass;
+        public static string CuentaTarjetas;
+        public static string CuentaOtros;
+        public static string CuentaTarjetaPlus;
+        public static string CuentaTicketTronik;
+        public static string CuentaSobretasaCorriente;
+        public static string CuentaSobretasaSuper;
+        public static string CuentaSobretasaDiesel;
+        public static string CuentaVentaCorriente;
+        public static string CuentaVentaSuper;
+        public static string CuentaVentaDiesel;
+        public static string CuentaAjuste;
+
+        public static NitDTO formatearNit(String nit)
+        {
+            NitDTO resultado = new NitDTO();
+
+            if (nit.Length <= 9)
+            {
+                resultado.Nit = nit;
+                resultado.DigitoVerfificacion = "0";
+                resultado.Codigo = "0";
+            }
+
+            if (nit.Length > 9) //Cuando se tiene el nit y el digito de verificacion en el mismo campo
+            {
+                resultado.Nit = nit.Substring(0, 9);
+                resultado.DigitoVerfificacion = nit.Substring(9, 1);
+                resultado.Codigo = "0";
+            }
+            if (nit.Length > 10) //Cuando ademas se tienen consecutivos adicionales
+            {
+                resultado.Nit = nit.Substring(0, 9);
+                resultado.DigitoVerfificacion = nit.Substring(9, 1);
+                resultado.Codigo = nit.Substring(10, (nit.Length - 10));
+            }
+
+            return resultado;
+        }
     }
 
 }

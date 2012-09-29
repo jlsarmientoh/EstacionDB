@@ -38,6 +38,32 @@ namespace EstacionDB.DAO
             }
         }
 
+        public List<ClienteVO> consultarClientesServP()
+        {
+            List<ClienteVO> clientes = new List<ClienteVO>();
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configServ).CreateCriteria(typeof(ClienteVO))
+                    .AddOrder(Order.Asc("Nombre"));
+
+                IList tmp = criteria.List();
+                foreach (ClienteVO cliente in tmp)
+                {
+                    clientes.Add(cliente);
+                }
+                ConnectionHelper.CloseSession();
+
+                return clientes;
+
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla clientes.", ex);
+            }
+        }
+
+
         public ClienteVO consultarClientesById(long idCliente)
         {
             ClienteVO tmpCliente = null;

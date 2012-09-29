@@ -47,17 +47,17 @@ namespace EstacionDB.DAO
                         
                         if(Utilidades.Utilidades.codigoCorriente == tmpLectura.CodigoArticulo)
                                 {
-                                    tmpLectura.Sobretasa = Utilidades.Utilidades.sobretasaCorriente;
+                                    tmpLectura.Sobretasa = 0;
                                     
                                 }
                         if(Utilidades.Utilidades.codigoSuper == tmpLectura.CodigoArticulo)
                                 {
-                                    tmpLectura.Sobretasa = Utilidades.Utilidades.sobretasaSuper;
+                                    tmpLectura.Sobretasa = 0;
                                     
                                 }
                         if(Utilidades.Utilidades.codigoDiesel == tmpLectura.CodigoArticulo)
                                 {
-                                    tmpLectura.Sobretasa = Utilidades.Utilidades.sobretasaDiesel;
+                                    tmpLectura.Sobretasa = 0;
                                     
                                 }
                         

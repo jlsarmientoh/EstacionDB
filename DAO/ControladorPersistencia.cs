@@ -4,6 +4,7 @@ using System.Text;
 using EstacionDB.Exceptions;
 using EstacionDB.VO;
 using System.Collections;
+using EstacionDB.DTO;
 
 namespace EstacionDB.DAO
 {
@@ -20,6 +21,7 @@ namespace EstacionDB.DAO
         private CierreVentasDAO cierreVentasDAO = null;
         private EmpleadoDAO empleadosDAO = null;
         private ProductosTurnoDAO productosTurnoDAO = null;
+        private SobretasasDAO sobretasasDAO = null;
         #endregion
         #region métodos para obtener instancias de los DAO's
         private VentasDAO getVentasDAO()
@@ -111,6 +113,15 @@ namespace EstacionDB.DAO
             }
             return productosTurnoDAO;
         }
+
+        private SobretasasDAO getSobreTasasDAO()
+        {
+            if (sobretasasDAO == null)
+            {
+                sobretasasDAO = new SobretasasDAO();
+            }
+            return sobretasasDAO;
+        }
         #endregion
 
 
@@ -164,6 +175,292 @@ namespace EstacionDB.DAO
             {
                 throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
             }
+        }
+
+        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2)
+        {
+            try
+            {   
+                return getVentasDAO().consultarVentasAgrupadas(fecha1, fecha2);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
+            }
+        }
+
+        public List<MovimientoContableDTO> getMovimientosContables(DateTime fecha1, DateTime fecha2, string doc)
+        {
+            List<MovimientoContableDTO> movimientos = new List<MovimientoContableDTO>();
+
+            try
+            {
+                double sobretasaCorriente = 0;
+                double sobretasaSuper = 0;
+                double sobretasaDiesel = 0;
+                double subtotalSobretasaCorriente = 0;
+                double subtotalSobretasaSuper = 0;
+                double subtotalSobretasaDiesel = 0;
+                double totalCreditos = 0;
+                double totalDebitos = 0;
+                List<VentaVO> ventasCredito = getVentasDAO().consultarVentasAgrupadas(fecha1, fecha2);
+                List<CierreVentasVO> cierresVenta = getCierreDAO().consultarCierresAgrupados(fecha1, fecha2);
+                List<SobretasaVO> sobretasas = getSobreTasasDAO().consultarSobretasas(fecha1.Month, fecha1.Year);
+                List<ProductoTurnoVO> productos = getProductosTurnoDAO().consultarProductosAgrupados(fecha1, fecha2);
+                CierreVentasVO cv = cierresVenta[0];
+
+                #region Movimientos Debito
+                foreach (VentaVO vc in ventasCredito)
+                {
+                    MovimientoContableDTO mc = new MovimientoContableDTO();
+                    NitDTO nitDto = Utilidades.Utilidades.formatearNit(vc.Nit);
+                    mc.Fecha = vc.Fecha.ToString("dd/MM/yyyy");
+                    mc.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                    mc.Doc = doc;
+                    mc.Nit = nitDto.Nit;
+                    mc.Cuenta = Utilidades.Utilidades.CuentaCredito;
+                    mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                    mc.Valor = String.Format("{0,10:#,0.00}", vc.Total);
+                    mc.CentroCosto = "";
+                    movimientos.Add(mc);
+                }
+                                
+                // Movimiento contable para Efectivo
+                MovimientoContableDTO mc1 = new MovimientoContableDTO();                
+                mc1.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc1.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc1.Doc = doc;
+                mc1.Nit = "";
+                mc1.Cuenta = Utilidades.Utilidades.CuentaEfectivo;
+                mc1.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc1.Valor = String.Format("{0,10:#,0.00}", cv.Efectivo);
+                mc1.CentroCosto = "";
+                movimientos.Add(mc1);
+
+                // Movimiento contable para Sodexo
+                MovimientoContableDTO mc2 = new MovimientoContableDTO();
+                mc2.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc2.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc2.Doc = doc;
+                mc2.Nit = Utilidades.Utilidades.NitSodexo;
+                mc2.Cuenta = Utilidades.Utilidades.CuentaSodexo;
+                mc2.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc2.Valor = String.Format("{0,10:#,0.00}", cv.Sodexo);
+                mc2.CentroCosto = "";
+                movimientos.Add(mc2);
+
+                // Movimiento contable para Big Pass
+                MovimientoContableDTO mc3 = new MovimientoContableDTO();
+                mc3.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc3.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc3.Doc = doc;
+                mc3.Nit = Utilidades.Utilidades.NitBigPass;
+                mc3.Cuenta = Utilidades.Utilidades.CuentaBigPass;
+                mc3.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc3.Valor = String.Format("{0,10:#,0.00}", cv.BigPass);
+                mc3.CentroCosto = "";
+                movimientos.Add(mc3);
+
+                // Movimiento contable para Tarjetas de credito
+                MovimientoContableDTO mc4 = new MovimientoContableDTO();
+                mc4.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc4.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc4.Doc = doc;
+                mc4.Nit = "";
+                mc4.Cuenta = Utilidades.Utilidades.CuentaTarjetas;
+                mc4.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc4.Valor = String.Format("{0,10:#,0.00}", cv.Tarjetas);
+                mc4.CentroCosto = "";
+                movimientos.Add(mc3);
+
+                // Movimiento contable para Tarjeta Plus
+                MovimientoContableDTO mc5 = new MovimientoContableDTO();
+                mc5.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc5.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc5.Doc = doc;
+                mc5.Nit = Utilidades.Utilidades.NitEDS;
+                mc5.Cuenta = Utilidades.Utilidades.CuentaTarjetaPlus;
+                mc5.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc5.Valor = String.Format("{0,10:#,0.00}", cv.TarjetaPlus);
+                mc5.CentroCosto = "";
+                movimientos.Add(mc5);
+
+                // Movimiento contable para Ticket Tronik
+                MovimientoContableDTO mc6 = new MovimientoContableDTO();
+                mc6.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc6.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc6.Doc = doc;
+                mc6.Nit = Utilidades.Utilidades.NitTicketTronik;
+                mc6.Cuenta = Utilidades.Utilidades.CuentaTicketTronik;
+                mc6.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc6.Valor = String.Format("{0,10:#,0.00}", cv.TicketTronik);
+                mc6.CentroCosto = "";
+                movimientos.Add(mc6);
+
+                // Movimiento contable para Otros
+                MovimientoContableDTO mc7 = new MovimientoContableDTO();
+                mc7.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
+                mc7.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                mc7.Doc = doc;
+                mc7.Nit = Utilidades.Utilidades.NitEDS;
+                mc7.Cuenta = Utilidades.Utilidades.CuentaOtros;
+                mc7.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                mc7.Valor = String.Format("{0,10:#,0.00}", cv.Otros);
+                mc7.CentroCosto = "";
+                movimientos.Add(mc7);
+                #endregion
+
+                #region Movimientos credito
+
+                // Sobretasas
+                foreach(SobretasaVO st in sobretasas){
+                    switch (st.IdProducto)
+                    {
+                        case 1: {
+                            sobretasaCorriente = st.Sobretasa;
+                            break; 
+                        }
+                        case 2: {
+                            sobretasaSuper = st.Sobretasa;
+                            break; 
+                        }
+                        case 3: {
+                            sobretasaDiesel = st.Sobretasa;
+                            break; 
+                        }
+                    }
+                }
+
+                // Movimientos deSobretasas
+                foreach (ProductoTurnoVO pt in productos)
+                {
+                    
+                    if (pt.Producto.Equals("CORRIENTE"))
+                    {
+                        MovimientoContableDTO mcs = new MovimientoContableDTO();
+                        mcs.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
+                        mcs.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                        mcs.Doc = doc;
+                        mcs.Nit = Utilidades.Utilidades.NitEDS;
+                        mcs.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                        mcs.Cuenta = Utilidades.Utilidades.CuentaSobretasaCorriente;
+                        subtotalSobretasaCorriente = pt.Galones * sobretasaCorriente;
+                        mcs.Valor = String.Format("{0,10:#,0.00}", subtotalSobretasaCorriente);
+                        mcs.CentroCosto = "";
+                        movimientos.Add(mcs);
+
+                        MovimientoContableDTO mcn = new MovimientoContableDTO();
+                        mcn.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
+                        mcn.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                        mcn.Doc = doc;
+                        mcn.Nit = Utilidades.Utilidades.NitEDS;
+                        mcn.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                        mcn.Cuenta = Utilidades.Utilidades.CuentaVentaCorriente;                        
+                        mcn.Valor = String.Format("{0,10:#,0.00}", (pt.Valor - subtotalSobretasaCorriente));
+                        mcn.CentroCosto = "0901";
+                        movimientos.Add(mcn);
+                    }
+                    else if (pt.Producto.Equals("SUPER"))
+                    {
+                        MovimientoContableDTO mcs = new MovimientoContableDTO();
+                        mcs.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
+                        mcs.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                        mcs.Doc = doc;
+                        mcs.Nit = Utilidades.Utilidades.NitEDS;
+                        mcs.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                        mcs.Cuenta = Utilidades.Utilidades.CuentaSobretasaSuper;
+                        subtotalSobretasaSuper = pt.Galones * sobretasaSuper;
+                        mcs.Valor = String.Format("{0,10:#,0.00}", subtotalSobretasaSuper);
+                        mcs.CentroCosto = "";
+                        movimientos.Add(mcs);
+
+                        MovimientoContableDTO mcn = new MovimientoContableDTO();
+                        mcn.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
+                        mcn.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                        mcn.Doc = doc;
+                        mcn.Nit = Utilidades.Utilidades.NitEDS;
+                        mcn.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                        mcn.Cuenta = Utilidades.Utilidades.CuentaVentaSuper;
+                        mcn.Valor = String.Format("{0,10:#,0.00}", (pt.Valor - subtotalSobretasaSuper));
+                        mcn.CentroCosto = "0901";
+                        movimientos.Add(mcn);
+                    }
+                    else if (pt.Producto.Equals("DIESEL"))
+                    {
+                        MovimientoContableDTO mcs = new MovimientoContableDTO();
+                        mcs.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
+                        mcs.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                        mcs.Doc = doc;
+                        mcs.Nit = Utilidades.Utilidades.NitEDS;
+                        mcs.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                        mcs.Cuenta = Utilidades.Utilidades.CuentaSobretasaDiesel;
+                        subtotalSobretasaDiesel = pt.Galones * sobretasaDiesel;
+                        mcs.Valor = String.Format("{0,10:#,0.00}", subtotalSobretasaDiesel);
+                        mcs.CentroCosto = "";
+                        movimientos.Add(mcs);
+
+                        MovimientoContableDTO mcn = new MovimientoContableDTO();
+                        mcn.Fecha = pt.Fecha.ToString("dd/MM/yyyy");
+                        mcn.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                        mcn.Doc = doc;
+                        mcn.Nit = Utilidades.Utilidades.NitEDS;
+                        mcn.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                        mcn.Cuenta = Utilidades.Utilidades.CuentaVentaDiesel;
+                        mcn.Valor = String.Format("{0,10:#,0.00}", (pt.Valor - subtotalSobretasaDiesel));
+                        mcn.CentroCosto = "0901";
+                        movimientos.Add(mcn);
+                    }
+                }
+                #endregion
+
+                #region totales debito/creditos y validacion de ecuacion contable
+
+                foreach (MovimientoContableDTO mcDto in movimientos)
+                {
+                    if (mcDto.Naturaleza.Equals(Utilidades.Utilidades.NatutalezaCredito))
+                    {
+                        totalCreditos += double.Parse(mcDto.Valor);
+                    }
+                    else if (mcDto.Naturaleza.Equals(Utilidades.Utilidades.NatutalezaDebito))
+                    {
+                        totalDebitos += double.Parse(mcDto.Valor);
+                    }
+                }
+
+                if (totalCreditos > totalDebitos)
+                {
+                    MovimientoContableDTO mca = new MovimientoContableDTO();
+                    mca.Fecha = fecha1.ToString("dd/MM/yyyy");
+                    mca.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                    mca.Doc = doc;
+                    mca.Nit = Utilidades.Utilidades.NitEDS;
+                    mca.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
+                    mca.Cuenta = Utilidades.Utilidades.CuentaAjuste;
+                    mca.Valor = String.Format("{0,10:#,0.00}", (totalCreditos - totalDebitos));
+                    mca.CentroCosto = "";
+                    movimientos.Add(mca);
+                }
+                else if (totalDebitos > totalCreditos)
+                {
+                    MovimientoContableDTO mca = new MovimientoContableDTO();
+                    mca.Fecha = fecha1.ToString("dd/MM/yyyy");
+                    mca.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
+                    mca.Doc = doc;
+                    mca.Nit = Utilidades.Utilidades.NitEDS;
+                    mca.Naturaleza = Utilidades.Utilidades.NatutalezaCredito;
+                    mca.Cuenta = Utilidades.Utilidades.CuentaAjuste;
+                    mca.Valor = String.Format("{0,10:#,0.00}", (totalDebitos - totalCreditos));
+                    mca.CentroCosto = "";
+                    movimientos.Add(mca);
+                }
+                #endregion
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("Ha ocurrido un error al consultar los movimientos contables", ex);
+            }
+
+            return movimientos;
         }
 
         public VentaVO consultarVenta(long nroTiquete)
@@ -248,9 +545,21 @@ namespace EstacionDB.DAO
             {
                 return getClientesDAO().consultarClientes();
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta clientes en DB app.", ex);
+                throw new PersistenciaException("Error en la consulta clientes en DB app.", ex);
+            }
+        }
+
+        public List<ClienteVO> consultarClientesServP()
+        {
+            try
+            {
+                return getClientesDAO().consultarClientesServP();
+            }
+            catch(EstacionDBException ex)
+            {
+                throw new PersistenciaException("Error en la consulta clientes en DB Servipunto.", ex);
             }
         }
 
@@ -290,9 +599,9 @@ namespace EstacionDB.DAO
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la actualizacion de cliente en DB app.", ex);
+                throw new PersistenciaException("Error en la actualizacion de cliente en DB app.", ex);
             }
 
         }
