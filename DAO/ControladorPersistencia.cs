@@ -218,7 +218,7 @@ namespace EstacionDB.DAO
                     mc.Fecha = vc.Fecha.ToString("dd/MM/yyyy");
                     mc.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
                     mc.Doc = doc;
-                    if (Utilidades.Utilidades.HomologarNits && vc.ModoPago == 7) // Si se trata de una venta fidelizada
+                    if (Utilidades.Utilidades.HomologarNits) // Si se trata de una venta fidelizada
                     {
                         try
                         {
