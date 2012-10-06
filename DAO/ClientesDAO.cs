@@ -86,6 +86,28 @@ namespace EstacionDB.DAO
             }
         }
 
+        public ClienteVO consultarClienteByCodigo(string codigo)
+        {
+            ClienteVO tmpCliente = null;
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(ClienteVO))
+                    .Add(Expression.Eq("Codigo", codigo));
+
+                tmpCliente = criteria.UniqueResult<ClienteVO>();
+
+                ConnectionHelper.CloseSession();
+
+                return tmpCliente;
+
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+            }
+        }
+
         public int guardarCliente(ClienteVO cliente)
         {
             int rows = 0;

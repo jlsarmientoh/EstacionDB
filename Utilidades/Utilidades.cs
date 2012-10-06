@@ -45,6 +45,7 @@ namespace EstacionDB.Utilidades
         public static string CuentaVentaSuper;
         public static string CuentaVentaDiesel;
         public static string CuentaAjuste;
+        public static Boolean HomologarNits;
 
         public static NitDTO formatearNit(String nit)
         {
@@ -58,7 +59,7 @@ namespace EstacionDB.Utilidades
             foreach(char c in charArray)
             {
                 int flag;
-                if(!c.Equals('-') && !c.Equals(','))
+                if (!c.Equals('-') && !c.Equals(',') && !c.Equals('.'))
                 {
                     origin.Append(c);
                 }
@@ -70,21 +71,20 @@ namespace EstacionDB.Utilidades
             {
                 resultado.Nit = numericalNit;
                 resultado.DigitoVerfificacion = "0";
-                resultado.Codigo = "0";
             }
 
             if (numericalNit.Length > 9) //Cuando se tiene el nit y el digito de verificacion en el mismo campo
             {
                 resultado.Nit = numericalNit.Substring(0, 9);
                 resultado.DigitoVerfificacion = numericalNit.Substring(9, 1);
-                resultado.Codigo = "0";
             }
             if (numericalNit.Length > 10) //Cuando ademas se tienen consecutivos adicionales
             {
                 resultado.Nit = numericalNit.Substring(0, 9);
                 resultado.DigitoVerfificacion = numericalNit.Substring(9, 1);
-                resultado.Codigo = numericalNit.Substring(10, (numericalNit.Length - 10));
             }
+            //Se guarda el nit original de servP en el campo codigo para homologar con Expo
+            resultado.Codigo = numericalNit;
 
             return resultado;
         }

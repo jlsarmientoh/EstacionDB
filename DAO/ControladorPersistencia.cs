@@ -214,14 +214,39 @@ namespace EstacionDB.DAO
                 foreach (VentaVO vc in ventasCredito)
                 {
                     MovimientoContableDTO mc = new MovimientoContableDTO();
-                    NitDTO nitDto = Utilidades.Utilidades.formatearNit(vc.Nit);
+                    
                     mc.Fecha = vc.Fecha.ToString("dd/MM/yyyy");
                     mc.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
                     mc.Doc = doc;
-                    mc.Nit = nitDto.Nit;
+                    if (Utilidades.Utilidades.HomologarNits && vc.ModoPago == 7) // Si se trata de una venta fidelizada
+                    {
+                        try
+                        {
+                            ClienteVO tmpCliente = getClientesDAO().consultarClienteByCodigo(vc.Nit);
+                            if (tmpCliente != null)
+                            {
+                                mc.Nit = tmpCliente.Identificacion.Trim();
+                            }
+                            else
+                            {
+                                NitDTO nitDto = Utilidades.Utilidades.formatearNit(vc.Nit);
+                                mc.Nit = nitDto.Nit;
+                            }
+                        }
+                        catch (EstacionDBException ex)
+                        {
+                            NitDTO nitDto = Utilidades.Utilidades.formatearNit(vc.Nit);
+                            mc.Nit = nitDto.Nit;
+                        }
+                    }
+                    else
+                    {
+                        NitDTO nitDto = Utilidades.Utilidades.formatearNit(vc.Nit);
+                        mc.Nit = nitDto.Nit;
+                    }
+                    
                     mc.Cuenta = Utilidades.Utilidades.CuentaCredito;
-                    mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
-                    //mc.Valor = String.Format("{0,10:#,0.00}", vc.Total);
+                    mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;                    
                     mc.Valor = vc.Total.ToString("0.00", CultureInfo.InvariantCulture);
                     mc.CentroCosto = "";
                     movimientos.Add(mc);
@@ -815,5 +840,6 @@ namespace EstacionDB.DAO
                 throw new EstacionDBException("Error en la actualizacion de las ventas en DB app.", ex);
             }
         }
+
     }
 }

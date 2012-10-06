@@ -285,8 +285,6 @@ namespace EstacionDB.DAO
                 ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
                 tx = session.BeginTransaction();
 
-                DateTime fechaRegistro = DateTime.Now;
-
                 foreach (VentaTurnoVO tmp in ventas)
                 {   
                     session.Save(tmp);
