@@ -46,6 +46,8 @@ namespace EstacionDB.Utilidades
         public static string CuentaVentaDiesel;
         public static string CuentaAjuste;
         public static Boolean HomologarNits;
+        public static string CuentaBancaria;
+        public static string NitBanco;
 
         public static NitDTO formatearNit(String nit)
         {

@@ -28,7 +28,13 @@
     </property>
     <property name="Venta">
       <column name="VENTA"/>
-    </property>    
+    </property>
+    <property name="DiaInicioVigencia">
+      <column name="DIA_INICIO_VIGENCIA"/>
+    </property>
+    <property name="DiaFinVigenica">
+      <column name="DIA_FIN_VIGENCIA"/>
+    </property>
   </class>
 </hibernate-mapping>
 

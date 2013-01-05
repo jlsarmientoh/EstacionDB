@@ -206,7 +206,7 @@ namespace EstacionDB.DAO
                 double totalDebitos = 0;
                 List<VentaVO> ventasCredito = getVentasDAO().consultarVentasAgrupadas(fecha1, fecha2);
                 List<CierreVentasVO> cierresVenta = getCierreDAO().consultarCierresAgrupados(fecha1, fecha2);
-                List<SobretasaVO> sobretasas = getSobreTasasDAO().consultarSobretasas(fecha1.Month, fecha1.Year);
+                List<SobretasaVO> sobretasas = getSobreTasasDAO().consultarSobretasas(fecha1.Month, fecha1.Year, fecha1.Day);
                 List<ProductoTurnoVO> productos = getProductosTurnoDAO().consultarProductosAgrupados(fecha1, fecha2);
                 CierreVentasVO cv = cierresVenta[0];
 
@@ -249,6 +249,7 @@ namespace EstacionDB.DAO
                     mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;                    
                     mc.Valor = vc.Total.ToString("0.00", CultureInfo.InvariantCulture);
                     mc.CentroCosto = "";
+                    mc.CuentaBancaria = "";
                     movimientos.Add(mc);
                 }
                                 
@@ -258,10 +259,12 @@ namespace EstacionDB.DAO
                 mc1.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
                 mc1.Doc = doc;
                 mc1.Nit = "";
+                mc1.Nit = Utilidades.Utilidades.NitEDS;
                 mc1.Cuenta = Utilidades.Utilidades.CuentaEfectivo;
                 mc1.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc1.Valor = cv.Efectivo.ToString("0.00", CultureInfo.InvariantCulture);
                 mc1.CentroCosto = "";
+                mc1.CuentaBancaria = "";
                 movimientos.Add(mc1);
 
                 // Movimiento contable para Sodexo
@@ -274,6 +277,7 @@ namespace EstacionDB.DAO
                 mc2.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc2.Valor = cv.Sodexo.ToString("0.00", CultureInfo.InvariantCulture);
                 mc2.CentroCosto = "";
+                mc2.CuentaBancaria = "";
                 movimientos.Add(mc2);
 
                 // Movimiento contable para Big Pass
@@ -286,6 +290,7 @@ namespace EstacionDB.DAO
                 mc3.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc3.Valor = cv.BigPass.ToString("0.00", CultureInfo.InvariantCulture);
                 mc3.CentroCosto = "";
+                mc3.CuentaBancaria = "";
                 movimientos.Add(mc3);
 
                 // Movimiento contable para Tarjetas de credito
@@ -294,10 +299,12 @@ namespace EstacionDB.DAO
                 mc4.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
                 mc4.Doc = doc;
                 mc4.Nit = "";
+                mc4.Nit = Utilidades.Utilidades.NitBanco;
                 mc4.Cuenta = Utilidades.Utilidades.CuentaTarjetas;
                 mc4.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc4.Valor = cv.Tarjetas.ToString("0.00", CultureInfo.InvariantCulture);
                 mc4.CentroCosto = "";
+                mc4.CuentaBancaria = Utilidades.Utilidades.CuentaBancaria;
                 movimientos.Add(mc4);
 
                 // Movimiento contable para Tarjeta Plus
@@ -310,6 +317,7 @@ namespace EstacionDB.DAO
                 mc5.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc5.Valor = cv.TarjetaPlus.ToString("0.00", CultureInfo.InvariantCulture);
                 mc5.CentroCosto = "";
+                mc5.CuentaBancaria = "";
                 movimientos.Add(mc5);
 
                 // Movimiento contable para Ticket Tronik
@@ -322,6 +330,7 @@ namespace EstacionDB.DAO
                 mc6.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc6.Valor = cv.TicketTronik.ToString("0.00", CultureInfo.InvariantCulture);
                 mc6.CentroCosto = "";
+                mc6.CuentaBancaria = "";
                 movimientos.Add(mc6);
 
                 // Movimiento contable para Otros
@@ -334,6 +343,7 @@ namespace EstacionDB.DAO
                 mc7.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                 mc7.Valor = cv.Otros.ToString("0.00", CultureInfo.InvariantCulture);
                 mc7.CentroCosto = "";
+                mc7.CuentaBancaria = "";
                 movimientos.Add(mc7);
                 #endregion
 
@@ -374,6 +384,7 @@ namespace EstacionDB.DAO
                         subtotalSobretasaCorriente = pt.Galones * sobretasaCorriente;
                         mcs.Valor = subtotalSobretasaCorriente.ToString("0.00", CultureInfo.InvariantCulture);
                         mcs.CentroCosto = "";
+                        mcs.CuentaBancaria = "";
                         movimientos.Add(mcs);
 
                         MovimientoContableDTO mcn = new MovimientoContableDTO();
@@ -386,6 +397,7 @@ namespace EstacionDB.DAO
                         double diffsub = pt.Valor - subtotalSobretasaCorriente;
                         mcn.Valor = diffsub.ToString("0.00", CultureInfo.InvariantCulture);
                         mcn.CentroCosto = "0901";
+                        mcn.CuentaBancaria = "";
                         movimientos.Add(mcn);
                     }
                     else if (pt.Producto.Trim().Equals("SUPER"))
@@ -400,6 +412,7 @@ namespace EstacionDB.DAO
                         subtotalSobretasaSuper = pt.Galones * sobretasaSuper;
                         mcs.Valor = subtotalSobretasaSuper.ToString("0.00", CultureInfo.InvariantCulture);
                         mcs.CentroCosto = "";
+                        mcs.CuentaBancaria = "";
                         movimientos.Add(mcs);
 
                         MovimientoContableDTO mcn = new MovimientoContableDTO();
@@ -412,6 +425,7 @@ namespace EstacionDB.DAO
                         double diffsub1 = pt.Valor - subtotalSobretasaSuper;
                         mcn.Valor = diffsub1.ToString("0.00", CultureInfo.InvariantCulture);
                         mcn.CentroCosto = "0901";
+                        mcn.CuentaBancaria = "";
                         movimientos.Add(mcn);
                     }
                     else if (pt.Producto.Trim().Equals("DIESEL"))
@@ -426,6 +440,7 @@ namespace EstacionDB.DAO
                         subtotalSobretasaDiesel = pt.Galones * sobretasaDiesel;
                         mcs.Valor = subtotalSobretasaDiesel.ToString("0.00", CultureInfo.InvariantCulture);
                         mcs.CentroCosto = "";
+                        mcs.CuentaBancaria = "";
                         movimientos.Add(mcs);
 
                         MovimientoContableDTO mcn = new MovimientoContableDTO();
@@ -438,6 +453,7 @@ namespace EstacionDB.DAO
                         double diffsub2 = pt.Valor - subtotalSobretasaDiesel;
                         mcn.Valor = diffsub2.ToString("0.00", CultureInfo.InvariantCulture);
                         mcn.CentroCosto = "0901";
+                        mcn.CuentaBancaria = "";
                         movimientos.Add(mcn);
                     }
                 }
@@ -469,6 +485,7 @@ namespace EstacionDB.DAO
                     mca.Cuenta = Utilidades.Utilidades.CuentaAjuste;
                     mca.Valor = diff1.ToString("0.00", CultureInfo.InvariantCulture);
                     mca.CentroCosto = "0901";
+                    mca.CuentaBancaria = "";
                     movimientos.Add(mca);
                 }
                 else if (totalDebitos > totalCreditos)
@@ -483,6 +500,7 @@ namespace EstacionDB.DAO
                     mca.Cuenta = Utilidades.Utilidades.CuentaAjuste;
                     mca.Valor = diff.ToString("0.00", CultureInfo.InvariantCulture);
                     mca.CentroCosto = "0901";
+                    mca.CuentaBancaria = "";
                     movimientos.Add(mca);
                 }
                 #endregion

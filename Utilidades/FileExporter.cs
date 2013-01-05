@@ -23,22 +23,22 @@ namespace EstacionDB.Utilidades
                 {
                     if (Utilidades.usarEncabezados)
                     {
-                        sw.WriteLine("FECHA\tTIPO\tDOC\tNIT\tCUENTA\tNAT\tVALOR\tCCOSTO");
+                        sw.WriteLine("FECHA\tTIPO\tDOC\tNIT\tCUENTA\tNAT\tVALOR\tCCOSTO\tCTABANCARIA");
                     }
                     foreach (MovimientoContableDTO linea in ventas)
                     {
-                        sw.WriteLine(linea.Fecha + "\t" + linea.TipoDoc + "\t" + linea.Doc + "\t" + linea.Nit + "\t" + linea.Cuenta + "\t" + linea.Naturaleza + "\t" + linea.Valor + "\t" + linea.CentroCosto);
+                        sw.WriteLine(linea.Fecha + "\t" + linea.TipoDoc + "\t" + linea.Doc + "\t" + linea.Nit + "\t" + linea.Cuenta + "\t" + linea.Naturaleza + "\t" + linea.Valor + "\t" + linea.CentroCosto + "\t" + linea.CuentaBancaria);
                     }
                 }
                 if (tipo == EXCEL)
                 {
                     if (Utilidades.usarEncabezados)
                     {
-                        sw.WriteLine("FECHA" + Utilidades.separador + "TIPO" + Utilidades.separador + "DOC" + Utilidades.separador + "NIT" + Utilidades.separador + "CUENTA" + Utilidades.separador + "NAT" + Utilidades.separador + "VALOR" + Utilidades.separador + "CCOSTO");
+                        sw.WriteLine("FECHA" + Utilidades.separador + "TIPO" + Utilidades.separador + "DOC" + Utilidades.separador + "NIT" + Utilidades.separador + "CUENTA" + Utilidades.separador + "NAT" + Utilidades.separador + "VALOR" + Utilidades.separador + "CCOSTO" + Utilidades.separador + "CTABANCARIA");
                     }
                     foreach (MovimientoContableDTO linea in ventas)
                     {
-                        sw.WriteLine(linea.Fecha + Utilidades.separador + linea.TipoDoc + Utilidades.separador + linea.Doc + Utilidades.separador + linea.Nit + Utilidades.separador + linea.Cuenta + Utilidades.separador + linea.Naturaleza + Utilidades.separador + linea.Valor + Utilidades.separador + linea.CentroCosto);
+                        sw.WriteLine(linea.Fecha + Utilidades.separador + linea.TipoDoc + Utilidades.separador + linea.Doc + Utilidades.separador + linea.Nit + Utilidades.separador + linea.Cuenta + Utilidades.separador + linea.Naturaleza + Utilidades.separador + linea.Valor + Utilidades.separador + linea.CentroCosto + Utilidades.separador + linea.CuentaBancaria);
                     }
                 }
 

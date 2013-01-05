@@ -40,14 +40,16 @@ namespace EstacionDB.DAO
             }
         }
 
-        public List<SobretasaVO> consultarSobretasas(int mes, int anio)
+        public List<SobretasaVO> consultarSobretasas(int mes, int anio, int dia)
         {
             List<SobretasaVO> sobretasas = new List<SobretasaVO>();
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(SobretasaVO))
                     .Add(Expression.Eq("Mes", mes))
-                    .Add(Expression.Eq("Anio", anio));
+                    .Add(Expression.Eq("Anio", anio))
+                    .Add(Expression.Le("DiaInicioVigencia", dia))
+                    .Add(Expression.Ge("DiaFinVigenica", dia));
 
                 IList tmp = criteria.List();
 
@@ -67,14 +69,16 @@ namespace EstacionDB.DAO
             }
         }
 
-        public SobretasaVO consultarSobretasaProducto(int mes, int anio, int idProducto)
+        public SobretasaVO consultarSobretasaProducto(int mes, int anio, int idProducto, int dia)
         {
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(SobretasaVO))
                     .Add(Expression.Eq("Mes", mes))
                     .Add(Expression.Eq("Anio", anio))
-                    .Add(Expression.Eq("IdProducto", anio));
+                    .Add(Expression.Eq("IdProducto", anio))
+                    .Add(Expression.Le("DiaInicioVigencia", dia))
+                    .Add(Expression.Ge("DiaFinVigenica", dia));
 
                 SobretasaVO tmp = criteria.UniqueResult<SobretasaVO>();
                 ConnectionHelper.CloseSession();

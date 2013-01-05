@@ -62,5 +62,13 @@ namespace EstacionDB.DTO
             get { return centroCosto; }
             set { centroCosto = value; }
         }
+
+        private string cuentaBancaria;
+
+        public string CuentaBancaria
+        {
+            get { return cuentaBancaria; }
+            set { cuentaBancaria = value; }
+        }
     }
 }

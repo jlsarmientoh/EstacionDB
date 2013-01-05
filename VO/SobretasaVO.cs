@@ -69,5 +69,20 @@ namespace EstacionDB.VO
             get { return venta; }
             set { venta = value; }
         }
+
+        private int diaInicioVigencia;
+
+        public virtual int DiaInicioVigencia
+        {
+            get { return diaInicioVigencia; }
+            set { diaInicioVigencia = value; }
+        }
+        private int diaFinVigenica;
+
+        public virtual int DiaFinVigenica
+        {
+            get { return diaFinVigenica; }
+            set { diaFinVigenica = value; }
+        }
     }
 }
