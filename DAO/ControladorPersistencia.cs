@@ -265,9 +265,17 @@ namespace EstacionDB.DAO
                         NitDTO nitDto = Utilidades.Utilidades.formatearNit(vc.Nit);
                         mc.Nit = nitDto.Nit;
                     }
-                    
-                    mc.Cuenta = Utilidades.Utilidades.CuentaCredito;
-                    mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;                    
+
+                    if (vc.ModoPago == 2)
+                    {
+                        mc.Cuenta = Utilidades.Utilidades.CuentaTarjetaPlus;
+                    }
+                    else
+                    {
+                        mc.Cuenta = Utilidades.Utilidades.CuentaCredito;
+                    }
+
+                    mc.Naturaleza = Utilidades.Utilidades.NatutalezaDebito;
                     mc.Valor = vc.Total.ToString("0.00", CultureInfo.InvariantCulture);
                     mc.CentroCosto = "";
                     mc.CuentaBancaria = "";
@@ -329,7 +337,7 @@ namespace EstacionDB.DAO
                 movimientos.Add(mc4);
 
                 // Movimiento contable para Tarjeta Plus
-                MovimientoContableDTO mc5 = new MovimientoContableDTO();
+                /*MovimientoContableDTO mc5 = new MovimientoContableDTO();
                 mc5.Fecha = cv.Fecha.ToString("dd/MM/yyyy");
                 mc5.TipoDoc = Utilidades.Utilidades.TipoMovimiento;
                 mc5.Doc = doc;
@@ -339,7 +347,7 @@ namespace EstacionDB.DAO
                 mc5.Valor = cv.TarjetaPlus.ToString("0.00", CultureInfo.InvariantCulture);
                 mc5.CentroCosto = "";
                 mc5.CuentaBancaria = "";
-                movimientos.Add(mc5);
+                movimientos.Add(mc5);*/
 
                 // Movimiento contable para Ticket Tronik
                 MovimientoContableDTO mc6 = new MovimientoContableDTO();

@@ -314,7 +314,7 @@ namespace EstacionDB.DAO
             List<VentaVO> ventas = new List<VentaVO>();
             try
             {
-                string sqlQuery = "Select v.Fecha, v.Nit, sum(v.Total) From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And MODO_PAGO <> 2 Group By v.Fecha, v.Nit";
+                string sqlQuery = "Select v.Fecha, v.Nit, sum(v.Total), v.ModoPago From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 Group By v.Fecha, v.Nit, v.ModoPago";
                 IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
                 query.SetParameter("Fecha1", fecha1);
                 query.SetParameter("Fecha2", fecha2);
@@ -326,6 +326,7 @@ namespace EstacionDB.DAO
                    v.Fecha = DateTime.Parse(venta[0].ToString());
                    v.Nit = venta[1].ToString();
                    v.Total = double.Parse(venta[2].ToString());
+                   v.ModoPago = long.Parse(venta[3].ToString());
                    ventas.Add(v);                
                 }
 
