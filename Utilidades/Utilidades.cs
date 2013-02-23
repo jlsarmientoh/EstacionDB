@@ -22,7 +22,9 @@ namespace EstacionDB.Utilidades
         public static int codigoDiesel;
         public static string grupo1;
         public static string grupo2;
-        public static int multiplicarX;
+        public static int corrienteMultiplicarX;
+        public static int superMultiplicarX;
+        public static int dieselMultiplicarX;
         public static string TipoMovimiento;
         public static string NatutalezaDebito;
         public static string NatutalezaCredito;

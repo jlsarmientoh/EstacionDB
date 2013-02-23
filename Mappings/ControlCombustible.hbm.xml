@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.ControlCombustibleVO" table="CONTROL_COMBUSTIBLE">
+    <id name="Id">
+      <column name="ID" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>
+    <property name="GalonesCompra">
+      <column name="GALONES_COMPRA"/>
+    </property>
+    <property name="InventarioInicial">
+      <column name="INV_INICIAL"/>
+    </property>
+    <property name="InventarioFinal">
+      <column name="INV_FINAL"/>
+    </property>
+    <property name="VentaMedida">
+      <column name="VENTA_MEDIDA"/>
+    </property>
+    <property name="VentaSurtidor">
+      <column name="VENTA_SURTIDOR"/>
+    </property>
+    <property name="IdProducto">
+      <column name="ID_PRODUCTO"/>
+    </property>
+    <property name="SobranteDia">
+      <column name="SOBRANTE_DIA"/>
+    </property>
+    <property name="SobranteAcumulado">
+      <column name="SOBRANTE_ACUMULADO"/>
+    </property>
+    <property name="Procentaje">
+      <column name="PORCENTAJE_EDS"/>
+    </property>
+  </class>
+</hibernate-mapping>

@@ -20,6 +20,8 @@
     <mapping resource="EstacionDB.Mappings.Cliente.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.ProductoTurnoExpo.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.Sobretasa.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.Producto.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.ControlCombustible.hbm.xml" assembly="EstacionDB" />
   </session-factory>
 
 </hibernate-configuration>

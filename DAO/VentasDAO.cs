@@ -314,7 +314,7 @@ namespace EstacionDB.DAO
             List<VentaVO> ventas = new List<VentaVO>();
             try
             {
-                string sqlQuery = "Select v.Fecha, v.Nit, sum(v.Total) From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 Group By v.Fecha, v.Nit";
+                string sqlQuery = "Select v.Fecha, v.Nit, sum(v.Total) From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And MODO_PAGO <> 2 Group By v.Fecha, v.Nit";
                 IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
                 query.SetParameter("Fecha1", fecha1);
                 query.SetParameter("Fecha2", fecha2);

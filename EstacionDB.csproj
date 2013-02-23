@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EstacionDB</RootNamespace>
     <AssemblyName>EstacionDB</AssemblyName>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,10 +66,12 @@
     <Compile Include="DAO\CierreVentasDAO.cs" />
     <Compile Include="DAO\ClientesDAO.cs" />
     <Compile Include="DAO\ControladorPersistencia.cs" />
+    <Compile Include="DAO\ControlCombustibleDAO.cs" />
     <Compile Include="DAO\EgresosDAO.cs" />
     <Compile Include="DAO\EmpleadoDAO.cs" />
     <Compile Include="DAO\IngresosDAO.cs" />
     <Compile Include="DAO\LecturasDAO.cs" />
+    <Compile Include="DAO\ProductosDAO.cs" />
     <Compile Include="DAO\ProductosTurnoDAO.cs" />
     <Compile Include="DAO\SobretasasDAO.cs" />
     <Compile Include="DAO\TipoIdDAO.cs" />
@@ -86,12 +89,14 @@
     <Compile Include="VO\BancoVO.cs" />
     <Compile Include="VO\CierreVentasVO.cs" />
     <Compile Include="VO\ClienteVO.cs" />
+    <Compile Include="VO\ControlCombustibleVO.cs" />
     <Compile Include="VO\EgresoVO.cs" />
     <Compile Include="VO\EmpleadoVO.cs" />
     <Compile Include="VO\IngresoVO.cs" />
     <Compile Include="VO\LecturaVO.cs" />
     <Compile Include="VO\ModoPagoVO.cs" />
     <Compile Include="VO\ProductoTurnoVO.cs" />
+    <Compile Include="VO\ProductoVO.cs" />
     <Compile Include="VO\SobretasaVO.cs" />
     <Compile Include="VO\TipoIdVO.cs" />
     <Compile Include="VO\VentaTurnoVO.cs" />
@@ -160,6 +165,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mappings\Sobretasa.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\ControlCombustible.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mappings\Producto.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

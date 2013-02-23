@@ -18,6 +18,7 @@ namespace EstacionDB.DAO
         public List<ProductoTurnoVO> consultarProductosTurno(int[] isla, long turno, DateTime fecha1, DateTime fecha2)
         {
             List<ProductoTurnoVO> productosTurno = new List<ProductoTurnoVO>();
+            int multiplicador = 1;
             try
             {
                 #region  se abre la conexión con la BD
@@ -37,6 +38,7 @@ namespace EstacionDB.DAO
                     // Si tiene reaultados los recorre fila por fila
                     while (reader.Read())
                     {
+                        multiplicador = 1; // default
                         ProductoTurnoVO pt = new ProductoTurnoVO();
                         if (reader["Fecha"] != null) pt.Fecha = DateTime.Parse(reader["Fecha"].ToString());
                         if (reader["Turno"] != null) pt.Turno = long.Parse(reader["Turno"].ToString());
@@ -52,7 +54,19 @@ namespace EstacionDB.DAO
                         {
                             pt.Isla = 2;
                         }
-                        pt.Valor = (pt.Valor * Utilidades.Utilidades.multiplicarX);
+                        if (pt.Producto.Trim().Equals("CORRIENTE"))
+                        {
+                            multiplicador = Utilidades.Utilidades.corrienteMultiplicarX;
+                        }
+                        if (pt.Producto.Trim().Equals("SUPER"))
+                        {
+                            multiplicador = Utilidades.Utilidades.superMultiplicarX;
+                        }
+                        if (pt.Producto.Trim().Equals("DIESEL"))
+                        {
+                            multiplicador = Utilidades.Utilidades.dieselMultiplicarX;
+                        }
+                        pt.Valor = (pt.Valor * multiplicador);
                         productosTurno.Add(pt);
                     }
                 }

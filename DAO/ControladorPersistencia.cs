@@ -6,6 +6,7 @@ using EstacionDB.VO;
 using System.Collections;
 using EstacionDB.DTO;
 using System.Globalization;
+using NHibernate.Mapping;
 
 namespace EstacionDB.DAO
 {
@@ -23,6 +24,8 @@ namespace EstacionDB.DAO
         private EmpleadoDAO empleadosDAO = null;
         private ProductosTurnoDAO productosTurnoDAO = null;
         private SobretasasDAO sobretasasDAO = null;
+        private ProductosDAO productosDAO = null;
+        private ControlCombustibleDAO controlCombustibleDAO = null;
         #endregion
         #region métodos para obtener instancias de los DAO's
         private VentasDAO getVentasDAO()
@@ -123,6 +126,24 @@ namespace EstacionDB.DAO
             }
             return sobretasasDAO;
         }
+
+        private ProductosDAO getProductosDAO()
+        {
+            if (productosDAO == null)
+            {
+                productosDAO = new ProductosDAO();
+            }
+            return productosDAO;
+        }
+
+        private ControlCombustibleDAO getControlCombustibleDAO()
+        {
+            if (controlCombustibleDAO == null)
+            {
+                controlCombustibleDAO = new ControlCombustibleDAO();
+            }
+            return controlCombustibleDAO;
+        }
         #endregion
 
 
@@ -146,9 +167,9 @@ namespace EstacionDB.DAO
                 }
                 return getVentasDAO().consultarVentasFidelizados(codEmp, fecha1, fecha2, islas, int.Parse(turno.ToString()));
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.",ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.",ex);
             }
         }
 
@@ -172,9 +193,9 @@ namespace EstacionDB.DAO
                 }
                 return getVentasDAO().consultarVentasNoFidelizados(codEmp, fecha1, fecha2, islas, int.Parse(turno.ToString()));
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
             }
         }
 
@@ -519,9 +540,9 @@ namespace EstacionDB.DAO
             {
                 return getVentasDAO().consultarVentasByTiquete(nroTiquete);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
             }
         }
 
@@ -545,9 +566,9 @@ namespace EstacionDB.DAO
                 }
                 return getVentasDAO().consultarVentasByTiqueteTurno(nroTiquete,fecha1,fecha2, islas, turno);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
             }
         }
 
@@ -571,9 +592,9 @@ namespace EstacionDB.DAO
                 }
                 return getVentasDAO().consultarTotalVentasFidelizados(codEmpleado, turno, islas, fecha1, fecha2);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
             }
         }
 
@@ -583,9 +604,9 @@ namespace EstacionDB.DAO
             {
                 return getLecturasDAO().consultarLecturas(fecha1, fecha2);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta lecturas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta lecturas en DB estación.", ex);
             }
         }
 
@@ -619,9 +640,9 @@ namespace EstacionDB.DAO
             {
                 return getClientesDAO().consultarClientesById(idCliente);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta clientes en DB app.", ex);
+                throw new PersistenciaException("Error en la consulta clientes en DB app.", ex);
             }
         }
 
@@ -631,9 +652,9 @@ namespace EstacionDB.DAO
             {
                 return getTiposDAO().consultarTipos();
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta tipos id en DB app.", ex);
+                throw new PersistenciaException("Error en la consulta tipos id en DB app.", ex);
             }
         }
 
@@ -662,9 +683,9 @@ namespace EstacionDB.DAO
             {
                 return getVentasDAO().guardarVentas(ventas);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la actualizacion de las ventas en DB app.", ex);
+                throw new PersistenciaException("Error en la actualizacion de las ventas en DB app.", ex);
             }
         }
 
@@ -674,9 +695,9 @@ namespace EstacionDB.DAO
             {
                 return getBancosDAO().consultarBancos();
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta bancos en DB app.", ex);
+                throw new PersistenciaException("Error en la consulta bancos en DB app.", ex);
             }
         }
 
@@ -693,7 +714,7 @@ namespace EstacionDB.DAO
             }
             catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("No se pudo realizar el cierre de ingresos para la fecha seleccionada", ex);
+                throw new PersistenciaException("No se pudo realizar el cierre de ingresos para la fecha seleccionada", ex);
             }
         }
 
@@ -705,7 +726,7 @@ namespace EstacionDB.DAO
             }
             catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("No se pudo realizar el cierre de egresos para la fecha seleccionada", ex);
+                throw new PersistenciaException("No se pudo realizar el cierre de egresos para la fecha seleccionada", ex);
             }
         }
 
@@ -715,9 +736,9 @@ namespace EstacionDB.DAO
             {
                 return getCierreDAO().consultarCuentaCierres(codEmpleado, turno, isla, fecha1, fecha2);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta cierres en DB Expo.", ex);
+                throw new PersistenciaException("Error en la consulta cierres en DB Expo.", ex);
             }
         }
 
@@ -767,7 +788,7 @@ namespace EstacionDB.DAO
             }
             catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("No se pudo realizar el cierre de ventas para la fecha seleccionada", ex);
+                throw new PersistenciaException("No se pudo realizar el cierre de ventas para la fecha seleccionada", ex);
             }
         }
 
@@ -779,7 +800,7 @@ namespace EstacionDB.DAO
             }
             catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta de empleados", ex);
+                throw new PersistenciaException("Error en la consulta de empleados", ex);
             }
         }
 
@@ -803,9 +824,9 @@ namespace EstacionDB.DAO
                 }
                 return getVentasDAO().consultarVentasTurno(codEmp, fecha1, fecha2, islas, int.Parse(turno.ToString()));
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
             }
         }
 
@@ -815,9 +836,9 @@ namespace EstacionDB.DAO
             {
                 return getVentasDAO().guardarVentasTurno(ventas);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la actualizacion de las ventas en DB app.", ex);
+                throw new PersistenciaException("Error en la actualizacion de las ventas en DB app.", ex);
             }
         }
 
@@ -841,9 +862,9 @@ namespace EstacionDB.DAO
                 }
                 return getProductosTurnoDAO().consultarProductosTurno(islas, turno, fecha1, fecha2);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la consulta ventas en DB estación.", ex);
+                throw new PersistenciaException("Error en la consulta ventas en DB estación.", ex);
             }
         }
 
@@ -853,9 +874,45 @@ namespace EstacionDB.DAO
             {
                 return getProductosTurnoDAO().guardarProductosTurno(productosTurno);
             }
-            catch (Exception ex)
+            catch (EstacionDBException ex)
             {
-                throw new EstacionDBException("Error en la actualizacion de las ventas en DB app.", ex);
+                throw new PersistenciaException("Error en la actualizacion de los productos del turno en DB app.", ex);
+            }
+        }
+
+        public int guardarControlCombustible(ControlCombustibleVO cc)
+        {
+            try
+            {
+                return getControlCombustibleDAO().guardarControlCombustible(cc);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("Error al guardar el control de combustible", ex);
+            }
+        }
+
+        public List<ProductoVO> consultarProductos()
+        {
+            try
+            {
+                return getProductosDAO().consultarProductos();
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("Error al consultar los productos", ex);
+            }
+        }
+
+        public List<ControlCombustibleVO> consultarControlProductoFecha(int idProducto, DateTime fechadesde, DateTime fechaHasta)
+        {
+            try
+            {
+                return getControlCombustibleDAO().consultarControles(idProducto, fechadesde, fechaHasta);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("Error al consultar el control de combustible por fecha y producto", ex);
             }
         }
 
