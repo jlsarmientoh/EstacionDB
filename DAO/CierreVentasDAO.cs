@@ -66,6 +66,44 @@ namespace EstacionDB.DAO
             }
         }
 
+
+        public int guardarCierres(List<CierreVentasVO> cierres)
+        {
+            int rows = 0;
+            ITransaction tx = null;
+
+            try
+            {
+                ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
+                tx = session.BeginTransaction();
+
+                foreach (CierreVentasVO cierre in cierres)
+                {
+                    if (cierre.IdCierre != null || cierre.IdCierre != 0)
+                    {
+                        session.Update(cierre);
+                    }
+                    else
+                    {
+                        session.Save(cierre);
+                    }
+                    rows++;
+                }
+
+                tx.Commit();
+
+                ConnectionHelper.CloseSession();
+
+                return rows;
+
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla ventas.", ex);
+            }
+        }
+
         public IList consultarCierres(DateTime fecha1, DateTime fecha2)
         {
             try

@@ -76,6 +76,7 @@
     <Compile Include="DAO\SobretasasDAO.cs" />
     <Compile Include="DAO\TipoIdDAO.cs" />
     <Compile Include="DAO\VentasDAO.cs" />
+    <Compile Include="DTO\CierreInfoDTO.cs" />
     <Compile Include="DTO\MovimientoContableDTO.cs" />
     <Compile Include="DTO\NitDTO.cs" />
     <Compile Include="DTO\WorkStatusDTO.cs" />

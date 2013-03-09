@@ -27,6 +27,26 @@ namespace EstacionDB.Utilidades
                     }
                     foreach (MovimientoContableDTO linea in ventas)
                     {
+                        /*StringBuilder sb = null;
+                        sb = new StringBuilder();
+                        sb.Append(linea.Fecha);
+                        sb.Append("\t");
+                        sb.Append(linea.TipoDoc);
+                        sb.Append("\t");
+                        sb.Append(linea.Doc);
+                        sb.Append("\t");
+                        sb.Append(linea.Nit);
+                        sb.Append("\t");
+                        sb.Append(linea.Cuenta);
+                        sb.Append("\t");
+                        sb.Append(linea.Naturaleza);
+                        sb.Append("\t");
+                        sb.Append(linea.Valor);
+                        sb.Append("\t");
+                        sb.Append(linea.CentroCosto);
+                        sb.Append("\t");
+                        sb.Append(linea.CuentaBancaria);
+                        sw.WriteLine(sb.ToString());*/
                         sw.WriteLine(linea.Fecha + "\t" + linea.TipoDoc + "\t" + linea.Doc + "\t" + linea.Nit + "\t" + linea.Cuenta + "\t" + linea.Naturaleza + "\t" + linea.Valor + "\t" + linea.CentroCosto + "\t" + linea.CuentaBancaria);
                     }
                 }

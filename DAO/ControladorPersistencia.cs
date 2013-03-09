@@ -213,7 +213,8 @@ namespace EstacionDB.DAO
 
         public List<MovimientoContableDTO> getMovimientosContables(DateTime fecha1, DateTime fecha2, string doc)
         {
-            List<MovimientoContableDTO> movimientos = new List<MovimientoContableDTO>();
+            List<MovimientoContableDTO> movimientos = null;
+            movimientos = new List<MovimientoContableDTO>();
 
             try
             {
@@ -225,11 +226,18 @@ namespace EstacionDB.DAO
                 double subtotalSobretasaDiesel = 0;
                 double totalCreditos = 0;
                 double totalDebitos = 0;
-                List<VentaVO> ventasCredito = getVentasDAO().consultarVentasAgrupadas(fecha1, fecha2);
-                List<CierreVentasVO> cierresVenta = getCierreDAO().consultarCierresAgrupados(fecha1, fecha2);
-                List<SobretasaVO> sobretasas = getSobreTasasDAO().consultarSobretasas(fecha1.Month, fecha1.Year, fecha1.Day);
-                List<ProductoTurnoVO> productos = getProductosTurnoDAO().consultarProductosAgrupados(fecha1, fecha2);
-                CierreVentasVO cv = cierresVenta[0];
+
+                List<VentaVO> ventasCredito = null;
+                List<CierreVentasVO> cierresVenta = null;
+                List<SobretasaVO> sobretasas = null;
+                List<ProductoTurnoVO> productos = null;
+                CierreVentasVO cv = null;
+
+                ventasCredito = getVentasDAO().consultarVentasAgrupadas(fecha1, fecha2);
+                cierresVenta = getCierreDAO().consultarCierresAgrupados(fecha1, fecha2);
+                sobretasas = getSobreTasasDAO().consultarSobretasas(fecha1.Month, fecha1.Year, fecha1.Day);
+                productos = getProductosTurnoDAO().consultarProductosAgrupados(fecha1, fecha2);
+                cv = cierresVenta[0];
 
                 #region Movimientos Debito
                 foreach (VentaVO vc in ventasCredito)
@@ -798,6 +806,38 @@ namespace EstacionDB.DAO
             {
                 throw new PersistenciaException("No se pudo realizar el cierre de ventas para la fecha seleccionada", ex);
             }
+        }
+
+        public int guardarCierres(List<CierreVentasVO> cierre)
+        {
+            try
+            {
+                return getCierreDAO().guardarCierres(cierre);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("No se pudo realizar el cierre de ventas para la fecha seleccionada", ex);
+            }
+        }
+
+        public CierreInfoDTO getCierreInfo(DateTime fecha1, DateTime fecha2)
+        {
+            CierreInfoDTO cierre = new CierreInfoDTO();
+            try
+            {
+                cierre.CierreDia = getCierreDAO().consultarCierresAgrupados(fecha1, fecha2)[0];
+                cierre.CierresTurnos = getCierreDAO().consultarCierres(fecha1, fecha2);
+                cierre.TotalConsumo = getProductosTurnoDAO().consultarTotalConsumo(fecha1, fecha2);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new PersistenciaException("Error al consultar la información de cierre", ex);
+            }
+            catch (NullReferenceException nre)
+            {
+                throw new PersistenciaException("No hay Información de cierre para la fecha seleccionada");
+            }
+            return cierre;
         }
 
         public IList getEmpleados()

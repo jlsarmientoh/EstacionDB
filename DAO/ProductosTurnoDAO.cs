@@ -163,6 +163,56 @@ namespace EstacionDB.DAO
             }
         }
 
+        public double consultarTotalConsumo(DateTime fecha1, DateTime fecha2)
+        {
+            double total = 0;
+            try
+            {
+                string sqlQuery = "Select sum(v.Valor) From EstacionDB.VO.ProductoTurnoVO v Where Fecha Between :Fecha1 And :Fecha2";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                object tmp = query.UniqueResult();
+
+                total += double.Parse(tmp.ToString());
+
+                ConnectionHelper.CloseSession();
+
+                return total;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla Productos_turno Expo.", ex);
+
+            }
+        }
+
+        public double consultarTotalGalones(DateTime fecha1, DateTime fecha2)
+        {
+            double total = 0;
+            try
+            {
+                string sqlQuery = "Select sum(v.Galones) From EstacionDB.VO.ProductoTurnoVO v Where Fecha Between :Fecha1 And :Fecha2";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                object tmp = query.UniqueResult();
+
+                total += double.Parse(tmp.ToString());
+
+                ConnectionHelper.CloseSession();
+
+                return total;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla Productos_turno Expo.", ex);
+
+            }
+        }
+
         public int guardarProductosTurno(List<ProductoTurnoVO> productosTurno)
         {
             int rows = 0;
