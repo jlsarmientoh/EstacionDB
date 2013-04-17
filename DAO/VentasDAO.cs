@@ -15,7 +15,7 @@ namespace EstacionDB.DAO
     {
         private SqlConnection con;
 
-        public List<VentaVO> consultarVentasFidelizados(long codEmp, DateTime fecha1, DateTime fecha2, int[] isla, int turno)
+        public List<VentaVO> consultarVentasFidelizados(long codEmp, DateTime fecha1, DateTime fecha2, string[] isla, int turno)
         {
             List<VentaVO> ventas = new List<VentaVO>();
             try
@@ -30,15 +30,7 @@ namespace EstacionDB.DAO
 
                 foreach (VentaVO venta in tmp)
                 {
-                    venta.ModoPago = 7;
-                    if (venta.Isla == 1 || venta.Isla == 2)
-                    {
-                        venta.Isla = 1;
-                    }
-                    else if (venta.Isla == 3 || venta.Isla == 4)
-                    {
-                        venta.Isla = 2;
-                    }
+                    venta.ModoPago = 7;                    
                     ventas.Add(venta);
                 }
                 
@@ -53,7 +45,7 @@ namespace EstacionDB.DAO
             }
         }
 
-        public List<VentaVO> consultarVentasNoFidelizados(long codEmp,DateTime fecha1, DateTime fecha2, int[] isla, int turno)
+        public List<VentaVO> consultarVentasNoFidelizados(long codEmp,DateTime fecha1, DateTime fecha2, string[] isla, int turno)
         {
             List<VentaVO> ventas = new List<VentaVO>();
             try
@@ -62,21 +54,13 @@ namespace EstacionDB.DAO
                     .Add(Expression.Eq("Cliente", "CLIENTE NO FIDELIZADO"))
                     .Add(Expression.Between("Fecha", fecha1, fecha2))
                     .Add(Expression.Eq("Turno", turno))
-                    .Add(Expression.In("Isla", isla))
+                    .Add(Expression.In("Isla",  isla))
                     .Add(Expression.Eq("CodEmpleado", codEmp));
                 IList tmp = criteria.List();
 
                 foreach (VentaVO venta in tmp)
                 {
-                    venta.ModoPago = 0;
-                    if (venta.Isla == 1 || venta.Isla == 2)
-                    {
-                        venta.Isla = 1;
-                    }
-                    else if (venta.Isla == 3 || venta.Isla == 4)
-                    {
-                        venta.Isla = 2;
-                    }
+                    venta.ModoPago = 0;                    
                     ventas.Add(venta);
                 }
 
@@ -92,7 +76,7 @@ namespace EstacionDB.DAO
             }
         }
 
-        public List<VentaTurnoVO> consultarVentasTurno(long codEmp, DateTime fecha1, DateTime fecha2, int[] isla, int turno)
+        public List<VentaTurnoVO> consultarVentasTurno(long codEmp, DateTime fecha1, DateTime fecha2, string[] isla, int turno)
         {
             List<VentaTurnoVO> ventas = new List<VentaTurnoVO>();
             try
@@ -108,15 +92,7 @@ namespace EstacionDB.DAO
                 {
                     VentaTurnoVO v = new VentaTurnoVO();
                     v.CodEmpleado = venta.CodEmpleado;
-                    v.Fecha = venta.Fecha;
-                    if (venta.Isla == 1 || venta.Isla == 2)
-                    {
-                        v.Isla = 1;
-                    }
-                    else if (venta.Isla == 3 || venta.Isla == 4)
-                    {
-                        v.Isla = 2;
-                    }
+                    v.Fecha = venta.Fecha;                    
                     v.Producto = venta.Producto;
                     v.Tiquete = venta.Tiquete;
                     v.Total = venta.Total;
@@ -146,16 +122,6 @@ namespace EstacionDB.DAO
                     .Add(Expression.Eq("Tiquete", nroTiquete));
                 
                 tmpVenta = criteria.UniqueResult<VentaVO>();
-
-                if (tmpVenta.Isla == 1 || tmpVenta.Isla == 2)
-                {
-                    tmpVenta.Isla = 1;
-                }
-                else if (tmpVenta.Isla == 3 || tmpVenta.Isla == 4)
-                {
-                    tmpVenta.Isla = 2;
-                }
-                
                 ConnectionHelper.CloseSession();
 
                 return tmpVenta;
@@ -167,7 +133,7 @@ namespace EstacionDB.DAO
             }
         }
 
-        public VentaVO consultarVentasByTiqueteTurno(long nroTiquete, DateTime fecha1, DateTime fecha2, int[] isla, int turno)
+        public VentaVO consultarVentasByTiqueteTurno(long nroTiquete, DateTime fecha1, DateTime fecha2, string[] isla, int turno)
         {
             VentaVO tmpVenta = null;
             try
@@ -179,15 +145,6 @@ namespace EstacionDB.DAO
                     .Add(Expression.In("Isla", isla));
 
                 tmpVenta = criteria.UniqueResult<VentaVO>();
-
-                if (tmpVenta.Isla == 1 || tmpVenta.Isla == 2)
-                {
-                    tmpVenta.Isla = 1;
-                }
-                else if (tmpVenta.Isla == 3 || tmpVenta.Isla == 4)
-                {
-                    tmpVenta.Isla = 2;
-                }
 
                 ConnectionHelper.CloseSession();
 

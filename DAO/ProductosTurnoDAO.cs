@@ -15,7 +15,7 @@ namespace EstacionDB.DAO
     {
         private SqlConnection con;
 
-        public List<ProductoTurnoVO> consultarProductosTurno(int[] isla, long turno, DateTime fecha1, DateTime fecha2)
+        public List<ProductoTurnoVO> consultarProductosTurno(string isla, long turno, DateTime fecha1, DateTime fecha2)
         {
             List<ProductoTurnoVO> productosTurno = new List<ProductoTurnoVO>();
             int multiplicador = 1;
@@ -28,7 +28,7 @@ namespace EstacionDB.DAO
                 #region se preparan los objetos para hacer la consulta y leerla
                 SqlDataReader reader = null;
                 SqlCommand query = new SqlCommand("SELECT P.Fecha, P.Isla, P.Turno, P.Galones, P.Valor, P.Producto FROM ViewProductosTurno P " +
-                        "WHERE P.Fecha BETWEEN '" + fecha1.ToString("dd-MM-yyyy") + "' AND '" + fecha2.ToString("dd-MM-yyyy") + "' AND Isla IN(" + isla[0] + "," + isla[1] + ") AND Turno = " + turno, con);                
+                        "WHERE P.Fecha BETWEEN '" + fecha1.ToString("dd-MM-yyyy") + "' AND '" + fecha2.ToString("dd-MM-yyyy") + "' AND Isla IN(" + isla + ") AND Turno = " + turno, con);                
                 #endregion
 
                 #region se ejecuta el query, se lee el resultado y se procesa en el VO;
@@ -46,14 +46,14 @@ namespace EstacionDB.DAO
                         if (reader["Producto"] != null) pt.Producto = reader["Producto"].ToString();
                         if (reader["Valor"] != null) pt.Valor = double.Parse(reader["Valor"].ToString());
                         if (reader["Galones"] != null) pt.Galones = double.Parse(reader["Galones"].ToString());
-                        if (pt.Isla == 1 || pt.Isla == 2)
+                        /*if (pt.Isla == 1 || pt.Isla == 2)
                         {
                             pt.Isla = 1;
                         }
                         else if (pt.Isla == 3 || pt.Isla == 4)
                         {
                             pt.Isla = 2;
-                        }
+                        }*/
                         if (pt.Producto.Trim().Equals("CORRIENTE"))
                         {
                             multiplicador = Utilidades.Utilidades.corrienteMultiplicarX;
@@ -80,54 +80,6 @@ namespace EstacionDB.DAO
                 desconectar();
                 throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
             }
-            /*try
-            {
-                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configServ).CreateCriteria(typeof(ProductoTurnoVO))
-                    .Add(Expression.Between("Fecha", fecha1, fecha2))
-                    .Add(Expression.In("Isla", isla))
-                    .Add(Expression.Eq("Turno", turno))
-                    .AddOrder(Order.Asc("Fecha"))
-                    .AddOrder(Order.Asc("Isla"))
-                    .AddOrder(Order.Asc("Turno"))
-                    .AddOrder(Order.Asc("Producto"));
-
-                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configServ).
-                    CreateSQLQuery("SELECT P.Fecha, P.Isla, P.Turno, P.Galones, P.Valor, P.Producto FROM ViewProductosTurno P " +
-                        "WHERE P.Fecha BETWEEN :Fecha1 AND :Fecha2 AND Isla IN(:isla) AND Turno = :Turno");
-                query.SetParameter("Fecha1", fecha1);
-                query.SetParameter("Fecha2", fecha2);
-                query.SetParameter("isla", isla);
-                query.SetParameter("Turno", turno);                
-
-                //IList tmp = criteria.List();
-                System.Collections.Generic.IList<ProductoTurnoVO> tmp = query.List<ProductoTurnoVO>();
-
-                foreach (ProductoTurnoVO productoTurno in tmp)
-                {
-                    ProductoTurnoVO pt = new ProductoTurnoVO();
-                    pt = productoTurno;
-                    if (pt.Isla == 1 || pt.Isla == 2)
-                    {
-                        pt.Isla = 1;
-                    }
-                    else if (pt.Isla == 3 || pt.Isla == 4)
-                    {
-                        pt.Isla = 2;
-                    }
-                    pt.Valor = (pt.Valor * Utilidades.Utilidades.multiplicarX);
-                    productosTurno.Add(pt);
-                }
-
-                ConnectionHelper.CloseSession();
-
-                return productosTurno;
-            }
-            catch (System.Exception ex)
-            {
-                ConnectionHelper.CloseSession();
-                throw new EstacionDBException("Error al leer la información de la vista Productos Turno.", ex);
-            }
-             */ 
         }
 
         public List<ProductoTurnoVO> consultarProductosAgrupados(DateTime fecha1, DateTime fecha2)

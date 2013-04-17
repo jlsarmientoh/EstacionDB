@@ -58,6 +58,7 @@
       <HintPath>..\..\Escritorio\libs\NHibernate.Spatial-2.1.2.GA-bin\Core\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -65,7 +66,6 @@
     <Compile Include="DAO\BancosDAO.cs" />
     <Compile Include="DAO\CierreVentasDAO.cs" />
     <Compile Include="DAO\ClientesDAO.cs" />
-    <Compile Include="DAO\ControladorPersistencia.cs" />
     <Compile Include="DAO\ControlCombustibleDAO.cs" />
     <Compile Include="DAO\EgresosDAO.cs" />
     <Compile Include="DAO\EmpleadoDAO.cs" />
