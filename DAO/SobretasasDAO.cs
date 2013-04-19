@@ -13,7 +13,7 @@ namespace EstacionDB.DAO
     public class SobretasasDAO
     {
         
-        public int guardarCierre(SobretasaVO sobretasa)
+        public int guardarSobretasa(SobretasaVO sobretasa)
         {
             int rows = 0;
             ITransaction tx = null;
@@ -23,7 +23,14 @@ namespace EstacionDB.DAO
                 ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
                 tx = session.BeginTransaction();
 
-                session.Save(sobretasa);
+                if (sobretasa.Id == 0)
+                {
+                    session.Save(sobretasa);
+                }
+                else
+                {
+                    session.Update(sobretasa);
+                }
 
                 tx.Commit();
                 rows++;
@@ -36,7 +43,33 @@ namespace EstacionDB.DAO
             catch (System.Exception ex)
             {
                 ConnectionHelper.CloseSession();
-                throw new EstacionDBException("Error al leer la información de la tabla sobretasas.", ex);
+                throw new EstacionDBException("Error al guardar la información de la tabla sobretasas.", ex);
+            }
+        }
+
+        public List<SobretasaVO> consultarSobretasas()
+        {
+            List<SobretasaVO> sobretasas = new List<SobretasaVO>();
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(SobretasaVO))
+                    .AddOrder(Order.Desc("Anio"));
+
+                IList tmp = criteria.List();
+
+                foreach (SobretasaVO sobretasa in tmp)
+                {
+                    sobretasas.Add(sobretasa);
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return sobretasas;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista sobretasas.", ex);
             }
         }
 
@@ -76,7 +109,7 @@ namespace EstacionDB.DAO
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(SobretasaVO))
                     .Add(Expression.Eq("Mes", mes))
                     .Add(Expression.Eq("Anio", anio))
-                    .Add(Expression.Eq("IdProducto", anio))
+                    .Add(Expression.Eq("IdProducto", idProducto))
                     .Add(Expression.Le("DiaInicioVigencia", dia))
                     .Add(Expression.Ge("DiaFinVigenica", dia));
 

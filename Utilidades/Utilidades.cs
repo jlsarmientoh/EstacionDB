@@ -51,6 +51,11 @@ namespace EstacionDB.Utilidades
         public static string CuentaBancaria;
         public static string NitBanco;
 
+        // constantes
+        public const int C_CLI_NIT = 1;
+        public const int C_CLI_CODIGO = 2;
+        public const int C_CLI_NOMBRE = 3;
+
         public static NitDTO formatearNit(String nit)
         {
             NitDTO resultado = new NitDTO();
