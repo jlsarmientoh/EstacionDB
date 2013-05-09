@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EstacionDB")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Gasonet S.A.")]
+[assembly: AssemblyCompany("Gaslissa")]
 [assembly: AssemblyProduct("EstacionDB")]
-[assembly: AssemblyCopyright("© Gasonet S.A. 2011")]
+[assembly: AssemblyCopyright("© Gaslissa")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // Puede especificar todos los valores o puede establecer como valores predeterminados los números de revisión y generación 
 // mediante el asterisco ('*'), como se muestra a continuación:
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.6.0.0")]
+[assembly: AssemblyFileVersion("1.6.0.0")]
