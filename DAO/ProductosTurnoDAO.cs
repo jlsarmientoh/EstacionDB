@@ -115,6 +115,8 @@ namespace EstacionDB.DAO
             }
         }
 
+        
+
         public double consultarTotalConsumo(DateTime fecha1, DateTime fecha2)
         {
             double total = 0;
