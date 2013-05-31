@@ -79,7 +79,7 @@ namespace EstacionDB.DAO
 
                 foreach (CierreVentasVO cierre in cierres)
                 {
-                    if (cierre.IdCierre != null || cierre.IdCierre != 0)
+                    if (cierre.IdCierre != null && cierre.IdCierre != 0)
                     {
                         session.Update(cierre);
                     }
