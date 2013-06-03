@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.VolumenTanqueVO" table="VOLUMENES_TANQUE">
+    <id name="IdVolumen">
+      <column name="ID_VOLUMEN" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="IdTanque">
+      <column name="ID_TANQUE"/>
+    </property>
+    <property name="Cms">
+      <column name="LECTURA_CM"/>
+    </property>
+    <property name="Galones">
+      <column name="VOLUMEN_GAL"/>
+    </property>
+    <property name="IdProducto">
+      <column name="ID_PRODUCTO"/>
+    </property>
+  </class>
+</hibernate-mapping>

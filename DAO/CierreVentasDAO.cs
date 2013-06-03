@@ -49,7 +49,14 @@ namespace EstacionDB.DAO
                 ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
                 tx = session.BeginTransaction();
 
-                session.Save(cierre);
+                if (cierre.IdCierre != null && cierre.IdCierre != 0)
+                {
+                    session.Save(cierre);
+                }
+                else
+                {
+                    session.Update(cierre);
+                }
 
                 tx.Commit();
                 rows++;

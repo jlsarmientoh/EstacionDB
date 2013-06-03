@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.TanqueVO" table="TANQUES">
+    <id name="IdTanque">
+      <column name="ID_TANQUE" sql-type="int" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Descripcion">
+      <column name="DESCRIPCION"/>
+    </property>
+  </class>
+</hibernate-mapping>

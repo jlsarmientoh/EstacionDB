@@ -74,8 +74,10 @@
     <Compile Include="DAO\ProductosDAO.cs" />
     <Compile Include="DAO\ProductosTurnoDAO.cs" />
     <Compile Include="DAO\SobretasasDAO.cs" />
+    <Compile Include="DAO\TanquesDAO.cs" />
     <Compile Include="DAO\TipoIdDAO.cs" />
     <Compile Include="DAO\VentasDAO.cs" />
+    <Compile Include="DAO\VolumenTanqueDAO.cs" />
     <Compile Include="DTO\CierreInfoDTO.cs" />
     <Compile Include="DTO\MovimientoContableDTO.cs" />
     <Compile Include="DTO\NitDTO.cs" />
@@ -99,9 +101,11 @@
     <Compile Include="VO\ProductoTurnoVO.cs" />
     <Compile Include="VO\ProductoVO.cs" />
     <Compile Include="VO\SobretasaVO.cs" />
+    <Compile Include="VO\TanqueVO.cs" />
     <Compile Include="VO\TipoIdVO.cs" />
     <Compile Include="VO\VentaTurnoVO.cs" />
     <Compile Include="VO\VentaVO.cs" />
+    <Compile Include="VO\VolumenTanqueVO.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mappings\Empleado.hbm.xml">
@@ -174,6 +178,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Mappings\Producto.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\Tanque.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mappings\VolumenTanque.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
