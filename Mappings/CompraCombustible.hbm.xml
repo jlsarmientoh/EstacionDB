@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.CompraCombustibleVO" table="COMPRAS_COMBUSTIBLE">
+    <id name="IdCompra">
+      <column name="ID_COMPRA" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Factura">
+      <column name="FACTURA"/>
+    </property>
+    <property name="IdProducto">
+      <column name="ID_PRODUCTO"/>
+    </property>
+    <property name="Galones">
+      <column name="CANTIDAD_GL"/>
+    </property>
+    <property name="ValorUnitario">
+      <column name="VALOR_UNITARIO"/>
+    </property>
+    <property name="Valor">
+      <column name="VALOR"/>
+    </property>
+    <property name="Flete">
+      <column name="FLETE"/>
+    </property>
+    <property name="Soldicom">
+      <column name="SOLDICOM"/>
+    </property>
+    <property name="Impuesto">
+      <column name="IMPUESTO"/>
+    </property>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>
+  </class>
+</hibernate-mapping>

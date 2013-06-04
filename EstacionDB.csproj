@@ -66,6 +66,7 @@
     <Compile Include="DAO\BancosDAO.cs" />
     <Compile Include="DAO\CierreVentasDAO.cs" />
     <Compile Include="DAO\ClientesDAO.cs" />
+    <Compile Include="DAO\CompraCombustibleDAO.cs" />
     <Compile Include="DAO\ControlCombustibleDAO.cs" />
     <Compile Include="DAO\EgresosDAO.cs" />
     <Compile Include="DAO\EmpleadoDAO.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="VO\BancoVO.cs" />
     <Compile Include="VO\CierreVentasVO.cs" />
     <Compile Include="VO\ClienteVO.cs" />
+    <Compile Include="VO\CompraCombustibleVO.cs" />
     <Compile Include="VO\ControlCombustibleVO.cs" />
     <Compile Include="VO\EgresoVO.cs" />
     <Compile Include="VO\EmpleadoVO.cs" />
@@ -186,6 +188,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Mappings\VolumenTanque.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mappings\CompraCombustible.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

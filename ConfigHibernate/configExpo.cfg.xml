@@ -24,6 +24,7 @@
     <mapping resource="EstacionDB.Mappings.ControlCombustible.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.Tanque.hbm.xml" assembly="EstacionDB" />
     <mapping resource="EstacionDB.Mappings.VolumenTanque.hbm.xml" assembly="EstacionDB" />
+    <mapping resource="EstacionDB.Mappings.CompraCombustible.hbm.xml" assembly="EstacionDB" />
   </session-factory>
 
 </hibernate-configuration>
