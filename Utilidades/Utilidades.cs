@@ -97,6 +97,26 @@ namespace EstacionDB.Utilidades
 
             return resultado;
         }
+
+        public static double redondear(double a)
+        {
+            double b = 0;
+            int e = (int)a;
+            double c = a - e;
+            if (c < 0.5)
+            {
+                b = a - c;
+            }
+            if (c == 0.5)
+            {
+                b = a;
+            }
+            if (c > 0.5)
+            {
+                b = e + 0.5;
+            }
+            return b;
+        }
     }
 
 }

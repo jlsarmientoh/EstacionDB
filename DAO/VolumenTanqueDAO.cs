@@ -68,8 +68,8 @@ namespace EstacionDB.DAO
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(VolumenTanqueVO))
-                    .Add(Expression.Eq("idTanque", idTanque))
-                    .Add(Expression.Eq("idProducto", idProducto))
+                    .Add(Expression.Eq("IdTanque", idTanque))
+                    .Add(Expression.Eq("IdProducto", idProducto))
                     .Add(Expression.Eq("Cms", cms));
 
                 volumen = (VolumenTanqueVO)criteria.UniqueResult();
