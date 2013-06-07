@@ -80,6 +80,7 @@
     <Compile Include="DAO\VentasDAO.cs" />
     <Compile Include="DAO\VolumenTanqueDAO.cs" />
     <Compile Include="DTO\CierreInfoDTO.cs" />
+    <Compile Include="DTO\LecturaDTO.cs" />
     <Compile Include="DTO\MovimientoContableDTO.cs" />
     <Compile Include="DTO\NitDTO.cs" />
     <Compile Include="DTO\WorkStatusDTO.cs" />

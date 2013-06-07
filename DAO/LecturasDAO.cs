@@ -81,6 +81,43 @@ namespace EstacionDB.DAO
             }
         }
 
+        public double consultarDiferenciaProducto(DateTime fecha1, DateTime fecha2, int idProducto)
+        {
+            double dif = 0;
+            try
+            {
+                #region  se abre la conexión con la BD
+                conectar();
+                #endregion
+
+                #region se preparan los objetos para hacer la consulta y leerla
+                SqlDataReader reader = null;
+                SqlCommand query = new SqlCommand("SELECT SUM([DIFERENCIA]) AS DIFERENCIA FROM " + Utilidades.Utilidades.nombreVistaLecturas + " WHERE FECHA BETWEEN '" + fecha1.ToString("dd-MM-yyyy") + "' AND '" + fecha2.ToString("dd-MM-yyyy") + "' AND [COD_ART] = " + idProducto, con);
+                #endregion
+
+                #region se ejecuta el query, se lee el resultado y se procesa en el VO;
+                reader = query.ExecuteReader();
+                if (reader != null)
+                {
+                    // Si tiene reaultados los recorre fila por fila
+                    while (reader.Read())
+                    {   
+                        if (reader["DIFERENCIA"] != null) dif = double.Parse(reader["DIFERENCIA"].ToString());
+                    }
+                }
+                #endregion
+
+                desconectar();
+                return dif;
+
+            }
+            catch (System.Exception ex)
+            {
+                desconectar();
+                throw new EstacionDBException("Error al leer la información de la vista Lecturas.", ex);
+            }
+        }
+
         private void conectar()
         {
             try
@@ -88,6 +125,10 @@ namespace EstacionDB.DAO
                 if (con == null)
                 {
                     con = ConnectionHelper.createDafaultConnection();
+                    con.Open();
+                }
+                else
+                {
                     con.Open();
                 }
             }
