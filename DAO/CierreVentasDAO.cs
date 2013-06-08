@@ -49,7 +49,7 @@ namespace EstacionDB.DAO
                 ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
                 tx = session.BeginTransaction();
 
-                if (cierre.IdCierre != null && cierre.IdCierre != 0)
+                if (cierre.IdCierre == 0)
                 {
                     session.Save(cierre);
                 }
@@ -86,7 +86,7 @@ namespace EstacionDB.DAO
 
                 foreach (CierreVentasVO cierre in cierres)
                 {
-                    if (cierre.IdCierre != null && cierre.IdCierre != 0)
+                    if (cierre.IdCierre != 0)
                     {
                         session.Update(cierre);
                     }

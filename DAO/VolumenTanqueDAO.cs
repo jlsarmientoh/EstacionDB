@@ -94,7 +94,7 @@ namespace EstacionDB.DAO
                 ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
                 tx = session.BeginTransaction();
 
-                if (volumen.IdVolumen != null && volumen.IdVolumen != 0)
+                if (volumen.IdVolumen == 0)
                 {
                     session.Save(volumen);
                 }

@@ -43,7 +43,7 @@ namespace EstacionDB.DAO
                 ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
                 tx = session.BeginTransaction();
 
-                if (t.IdTanque != null && t.IdTanque != 0)
+                if (t.IdTanque == 0)
                 {
                     session.Save(t);
                 }
