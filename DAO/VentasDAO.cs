@@ -299,6 +299,70 @@ namespace EstacionDB.DAO
             }
         }
 
+        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2, string nit, long modoPago)
+        {
+            List<VentaVO> ventas = new List<VentaVO>();
+            try
+            {
+                string sqlQuery = "Select v.Nit, sum(v.Total), v.ModoPago, v.Producto From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And Nit = :Nit And ModoPago = :ModoPago Group By v.Nit, v.Producto,v.ModoPago";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                query.SetParameter("Nit", nit);
+                query.SetParameter("ModoPago", modoPago);
+                IList tmp = query.List();
+
+                foreach (object[] venta in tmp)
+                {
+                    VentaVO v = new VentaVO();                    
+                    v.Nit = venta[0].ToString();
+                    v.Total = double.Parse(venta[1].ToString());
+                    v.ModoPago = long.Parse(venta[2].ToString());
+                    v.Producto = venta[3].ToString();
+                    ventas.Add(v);
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return ventas;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+
+            }
+        }
+
+        public List<ClienteVO> consultarClientesVentas()
+        {
+            List<ClienteVO> clientes = new List<ClienteVO>();
+            try
+            {
+                string sqlQuery = "Select v.Nit, v.Cliente From EstacionDB.VO.VentaVO v Group By v.Nit, v.Cliente Order By v.Cliente";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);                
+                IList tmp = query.List();
+
+                foreach (object[] venta in tmp)
+                {
+                    ClienteVO c = new ClienteVO();                    
+                    c.Identificacion = venta[0].ToString();
+                    c.Nombre = venta[1].ToString();
+                    clientes.Add(c);
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return clientes;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+
+            }
+        }
+
         private void conectar(string conectionString)
         {
             try
