@@ -133,6 +133,26 @@ namespace EstacionDB.DAO
             }
         }
 
+        public VentaVO consultarVentasByTiqueteExpo(long nroTiquete)
+        {
+            VentaVO tmpVenta = null;
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(VentaVO))
+                    .Add(Expression.Eq("Tiquete", nroTiquete));
+
+                tmpVenta = criteria.UniqueResult<VentaVO>();
+                ConnectionHelper.CloseSession();
+
+                return tmpVenta;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+            }
+        }
+
         public VentaVO consultarVentasByTiqueteTurno(long nroTiquete, DateTime fecha1, DateTime fecha2, string[] isla, int turno)
         {
             VentaVO tmpVenta = null;
@@ -233,6 +253,43 @@ namespace EstacionDB.DAO
             }
         }
 
+        public int guardarVenta(VentaVO venta)
+        {
+            int rows = 0;
+            ITransaction tx = null;
+            try
+            {
+                ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
+                tx = session.BeginTransaction();
+
+                if (venta.Tiquete != 0)
+                {
+                    session.Update(venta);
+                }
+                else
+                {
+                    session.Save(venta);
+                }
+
+                tx.Commit();
+                rows++;
+
+                ConnectionHelper.CloseSession();
+
+                return rows;
+
+            }
+            catch (System.Exception ex)
+            {
+                if (tx != null)
+                {
+                    tx.Rollback();
+                }
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla ventas.", ex);
+            }
+        }
+
         public int guardarVentasTurno(List<VentaTurnoVO> ventas)
         {
             int rows = 0;
@@ -320,6 +377,33 @@ namespace EstacionDB.DAO
                     v.ModoPago = long.Parse(venta[2].ToString());
                     v.Producto = venta[3].ToString();
                     ventas.Add(v);
+                }
+
+                ConnectionHelper.CloseSession();
+
+                return ventas;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
+
+            }
+        }
+
+        public List<VentaVO> consultarVentasCliente(DateTime fecha1, DateTime fecha2, string nit)
+        {
+            List<VentaVO> ventas = new List<VentaVO>();
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(VentaVO))
+                    .Add(Expression.Between("Fecha", fecha1, fecha2))
+                    .Add(Expression.Eq("Nit", nit));
+                IList tmp = criteria.List();
+
+                foreach (VentaVO venta in tmp)
+                {   
+                    ventas.Add(venta);
                 }
 
                 ConnectionHelper.CloseSession();
