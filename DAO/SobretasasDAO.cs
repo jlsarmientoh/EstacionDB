@@ -53,7 +53,8 @@ namespace EstacionDB.DAO
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(SobretasaVO))
-                    .AddOrder(Order.Desc("Anio"));
+                    .AddOrder(Order.Desc("Anio"))
+                    .AddOrder(Order.Desc("Mes"));
 
                 IList tmp = criteria.List();
 

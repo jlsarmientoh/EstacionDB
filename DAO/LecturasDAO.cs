@@ -45,7 +45,7 @@ namespace EstacionDB.DAO
                         if (reader["VR_DIFERENCIA"] != null) tmpLectura.VentaTotal = double.Parse(reader["VR_DIFERENCIA"].ToString());
                         if (reader["COD_ART"] != null) tmpLectura.CodigoArticulo = long.Parse(reader["COD_ART"].ToString());
                         
-                        if(Utilidades.Utilidades.codigoCorriente == tmpLectura.CodigoArticulo)
+                        /*if(Utilidades.Utilidades.codigoCorriente == tmpLectura.CodigoArticulo)
                                 {
                                     tmpLectura.Sobretasa = 0;
                                     
@@ -64,7 +64,7 @@ namespace EstacionDB.DAO
 
                         tmpLectura.ValorSobretasa = tmpLectura.VentaGalones * tmpLectura.Sobretasa;
                         tmpLectura.VentaNeta = tmpLectura.VentaTotal - tmpLectura.ValorSobretasa;
-
+                        */
                         lecturas.Add(tmpLectura);
                     }
                 }
@@ -78,6 +78,44 @@ namespace EstacionDB.DAO
             {
                 desconectar();
                 throw new EstacionDBException("Error al leer la información de la vista Lecturas.", ex);                
+            }
+        }
+
+        public double consultarLecturaFinalProducto(DateTime fecha1, DateTime fecha2, int idProducto)
+        {
+            double dif = 0;
+            
+            try
+            {
+                #region  se abre la conexión con la BD
+                conectar();
+                #endregion
+
+                #region se preparan los objetos para hacer la consulta y leerla
+                SqlDataReader reader = null;
+                SqlCommand query = new SqlCommand("SELECT SUM([Lec_Final]) AS Lectura FROM " + Utilidades.Utilidades.nombreVistaLecturas + " WHERE FECHA BETWEEN '" + fecha1.ToString("dd-MM-yyyy") + "' AND '" + fecha2.ToString("dd-MM-yyyy") + "' AND [COD_ART] = " + idProducto, con);
+                #endregion
+
+                #region se ejecuta el query, se lee el resultado y se procesa en el VO;
+                reader = query.ExecuteReader();
+                if (reader != null)
+                {
+                    // Si tiene reaultados los recorre fila por fila
+                    while (reader.Read())
+                    {   
+                        if (reader["Lectura"] != null) dif = double.Parse(reader["Lectura"].ToString());
+                    }
+                }
+                #endregion
+
+                desconectar();
+                return dif;
+
+            }
+            catch (System.Exception ex)
+            {
+                desconectar();
+                throw new EstacionDBException("Error al leer la información de la vista Lecturas.", ex);
             }
         }
 
