@@ -81,6 +81,55 @@ namespace EstacionDB.DAO
             }
         }
 
+        public List<LecturaVO> consultarLecturas(DateTime fecha1, DateTime fecha2, int isla, int turno)
+        {
+            List<LecturaVO> lecturas = new List<LecturaVO>();
+            try
+            {
+                #region  se abre la conexión con la BD
+                conectar();
+                #endregion
+
+                #region se preparan los objetos para hacer la consulta y leerla
+                SqlDataReader reader = null;
+                SqlCommand query = new SqlCommand("SELECT [Fecha],[Lec_Final],[Manguera],[Isla],[Turno],[Producto],[DIFERENCIA],[PRECIO],[VR_DIFERENCIA], [COD_ART] FROM " + Utilidades.Utilidades.nombreVistaLecturas + " WHERE FECHA BETWEEN '" + fecha1.ToString("dd-MM-yyyy") + "' AND '" + fecha2.ToString("dd-MM-yyyy") + "' AND Isla = " + isla + " AND Turno = " + turno, con);
+                #endregion
+
+                #region se ejecuta el query, se lee el resultado y se procesa en el VO;
+                reader = query.ExecuteReader();
+                if (reader != null)
+                {
+                    // Si tiene reaultados los recorre fila por fila
+                    while (reader.Read())
+                    {
+                        LecturaVO tmpLectura = new LecturaVO();
+                        if (reader["FECHA"] != null) tmpLectura.Fecha = DateTime.Parse(reader["FECHA"].ToString());
+                        if (reader["Lec_Final"] != null) tmpLectura.LecturaFinal = double.Parse(reader["Lec_Final"].ToString());
+                        if (reader["Manguera"] != null) tmpLectura.Manguera = int.Parse(reader["Manguera"].ToString());
+                        if (reader["Isla"] != null) tmpLectura.Isla = int.Parse(reader["Isla"].ToString());
+                        if (reader["Turno"] != null) tmpLectura.Turno = int.Parse(reader["Turno"].ToString());
+                        if (reader["Producto"] != null) tmpLectura.Producto = reader["Producto"].ToString();
+                        if (reader["DIFERENCIA"] != null) tmpLectura.VentaGalones = double.Parse(reader["DIFERENCIA"].ToString());
+                        if (reader["PRECIO"] != null) tmpLectura.Precio = double.Parse(reader["PRECIO"].ToString());
+                        if (reader["VR_DIFERENCIA"] != null) tmpLectura.VentaTotal = double.Parse(reader["VR_DIFERENCIA"].ToString());
+                        if (reader["COD_ART"] != null) tmpLectura.CodigoArticulo = long.Parse(reader["COD_ART"].ToString());
+                        
+                        lecturas.Add(tmpLectura);
+                    }
+                }
+                #endregion
+
+                desconectar();
+                return lecturas;
+
+            }
+            catch (System.Exception ex)
+            {
+                desconectar();
+                throw new EstacionDBException("Error al leer la información de la vista Lecturas.", ex);
+            }
+        }
+
         public double consultarLecturaFinalProducto(DateTime fecha1, DateTime fecha2, int idProducto)
         {
             double dif = 0;
