@@ -68,7 +68,7 @@ namespace EstacionDB.Utilidades
             foreach(char c in charArray)
             {
                 int flag;
-                if (!c.Equals('-') && !c.Equals(',') && !c.Equals('.'))
+                if (!c.Equals('-') && !c.Equals(',') && !c.Equals('.') && !c.Equals('#') && !c.Equals('/') && !c.Equals('*') && !c.Equals('&') && !c.Equals('%') && !c.Equals('$'))
                 {
                     origin.Append(c);
                 }
