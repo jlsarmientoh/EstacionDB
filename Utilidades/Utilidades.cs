@@ -50,7 +50,7 @@ namespace EstacionDB.Utilidades
         public static Boolean HomologarNits;
         public static string CuentaBancaria;
         public static string NitBanco;
-
+        public static UsuarioDTO usuarioSesion;
         // constantes
         public const int C_CLI_NIT = 1;
         public const int C_CLI_CODIGO = 2;
