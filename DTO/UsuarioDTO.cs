@@ -20,5 +20,21 @@ namespace EstacionDB.DTO
             get { return isAdmin; }
             set { isAdmin = value; }
         }
+
+        private string pwd;
+
+        public virtual string Pwd
+        {
+            get { return pwd; }
+            set { pwd = value; }
+        }
+
+        public UsuarioDTO() { }
+
+        public UsuarioDTO(String usr, bool admin)
+        {
+            this.usuario = usr;
+            this.isAdmin = admin;
+        }
     }
 }

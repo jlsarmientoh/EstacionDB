@@ -55,8 +55,10 @@ namespace EstacionDB.Helper
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.InnerException.Message);
-                currentSession.Close();
+                if (currentSession != null)
+                {
+                    currentSession.Close();
+                }
                 return null;
             }
         }

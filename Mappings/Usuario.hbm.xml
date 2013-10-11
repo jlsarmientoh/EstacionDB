@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.UsuarioVO" table="USUARIOS">
+    <id name="IdUsuario">
+      <column name="ID_USUARIO" sql-type="varchar" not-null="true"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="Pwd">
+      <column name="PWD"/>
+    </property>
+    <property name="IsAdmin">
+      <column name="ES_ADMIN"/>
+    </property>
+  </class>
+</hibernate-mapping>
