@@ -117,6 +117,16 @@ namespace EstacionDB.Utilidades
             }
             return b;
         }
+
+        public static string formatearDecimal(double valor)
+        {
+            return String.Format("{0,10:#,0.00}", valor);
+        }
+
+        public static double parsearDecimal(string valor)
+        {
+            return double.Parse(valor);
+        }
     }
 
 }

@@ -73,7 +73,6 @@ namespace EstacionDB.DAO
             }
         }
 
-
         public int guardarCierres(List<CierreVentasVO> cierres)
         {
             int rows = 0;
@@ -166,6 +165,32 @@ namespace EstacionDB.DAO
                 ConnectionHelper.CloseSession();
                 throw new EstacionDBException("Error al leer la información de la vista Ventas.", ex);
 
+            }
+        }
+
+        public double consultarTotalMedioPago(string medio, DateTime fecha1, DateTime fecha2)
+        {
+            double total = 0;
+            try
+            {
+                string sqlQuery = "Select sum(c." + medio + ") From EstacionDB.VO.CierreVentasVO c Where Fecha Between :Fecha1 And :Fecha2";
+                IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
+                query.SetParameter("Fecha1", fecha1);
+                query.SetParameter("Fecha2", fecha2);
+                object tmp = query.UniqueResult();
+
+                if (tmp != null)
+                {
+                    total = Double.Parse(tmp.ToString());
+                }
+
+                ConnectionHelper.CloseSession();
+                return total;
+            }
+            catch (Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla cierre_ventas", ex);
             }
         }
     }
