@@ -68,15 +68,15 @@ namespace EstacionDB.DAO
             }
         }
 
-        public IList<EgresoVO> consultarEgresosAplicados(DateTime fecha1, DateTime fecha2)
+        public IList consultarEgresosAplicados(DateTime fecha1, DateTime fecha2)
         {
-            IList<EgresoVO> egresos = null;
+            IList egresos = null;
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(EgresoVO))
                     .Add(Expression.Between("FechaAplica", fecha1, fecha2));
 
-                egresos = (IList<EgresoVO>)criteria.List();
+                egresos = criteria.List();
 
                 ConnectionHelper.CloseSession();
 
@@ -148,7 +148,69 @@ namespace EstacionDB.DAO
                     tx.Rollback();
                 }
                 ConnectionHelper.CloseSession();
-                throw new EstacionDBException("Error al leer la información de la tabla Egresos.", ex);
+                throw new EstacionDBException("Error al actualizar la información de la tabla Egresos.", ex);
+            }
+        }
+
+        public int guardarEgresos(IList<EgresoVO> egresos)
+        {
+            int rows = 0;
+            ITransaction tx = null;
+            try
+            {
+                ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
+                tx = session.BeginTransaction();
+
+                foreach (EgresoVO egreso in egresos)
+                {   
+                    session.SaveOrUpdate(egreso);
+                    rows++;
+                }
+
+                tx.Commit();
+
+                ConnectionHelper.CloseSession();
+
+                return rows;
+
+            }
+            catch (System.Exception ex)
+            {
+                if (tx != null)
+                {
+                    tx.Rollback();
+                }
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al actualizar la información de la tabla Egresos.", ex);
+            }
+        }
+
+        public int eliminarEgreso(EgresoVO egreso)
+        {
+            int rows = 0;
+            ITransaction tx = null;
+            try
+            {
+                ISession session = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo);
+                tx = session.BeginTransaction();
+
+                session.Delete(egreso);
+                rows++;
+
+                tx.Commit();
+
+                ConnectionHelper.CloseSession();
+
+                return rows;
+            }
+            catch (Exception ex)
+            {
+                if (tx != null)
+                {
+                    tx.Rollback();
+                }
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al eliminar el egreso de la tabla Egresos.", ex);
             }
         }
     }

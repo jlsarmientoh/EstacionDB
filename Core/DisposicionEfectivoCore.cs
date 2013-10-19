@@ -5,6 +5,7 @@ using EstacionDB.DAO;
 using EstacionDB.Exceptions;
 using EstacionDB.DTO;
 using EstacionDB.VO;
+using System.Collections;
 
 namespace EstacionDB.Core
 {
@@ -78,7 +79,7 @@ namespace EstacionDB.Core
             try
             {
                 IList<EgresoDTO> dtos = new List<EgresoDTO>();
-                IList<EgresoVO> vos = egresosDAO.consultarEgresosAplicados(fecha, fecha);
+                IList vos = egresosDAO.consultarEgresosAplicados(fecha, fecha);
                 
                 foreach (EgresoVO vo in vos)
                 {
@@ -99,6 +100,56 @@ namespace EstacionDB.Core
             catch (EstacionDBException ex)
             {
                 throw new CierreException("No se pudo obtener los egresos aplicados a la fecha indicada", ex);
+            }
+        }
+
+        public int eliminarEgreso(EgresoDTO egreso)
+        {
+            try
+            {
+                EgresoVO e = new EgresoVO();
+                e.Beneficiario = egreso.Beneficiario;
+                e.Documento = egreso.TipoDocumento;
+                e.Fecha = egreso.Fecha;
+                e.FechaAplica = egreso.FechaAplica;
+                e.IdEgreso = egreso.IdEgreso;
+                e.Isla = 0;
+                e.Numero = egreso.Numero;
+                e.Valor = egreso.Valor;
+
+                return egresosDAO.eliminarEgreso(e);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new CierreException("No se pudo eliminar el egreso", ex);
+            }
+        }
+
+        public int guardarEgresos(IList egresos)
+        {
+            try
+            {
+                IList<EgresoVO> vos = new List<EgresoVO>();
+                foreach (EgresoDTO dto in egresos)
+                {
+                    EgresoVO e = new EgresoVO();
+                    e.Beneficiario = dto.Beneficiario;
+                    e.Documento = dto.TipoDocumento;
+                    e.Fecha = dto.Fecha;
+                    e.FechaAplica = dto.FechaAplica;
+                    e.IdEgreso = dto.IdEgreso;
+                    e.Isla = 0;
+                    e.Numero = dto.Numero;
+                    e.Valor = dto.Valor;
+
+                    vos.Add(e);
+                }
+
+                return egresosDAO.guardarEgresos(vos);
+            }
+            catch (EstacionDBException ex)
+            {
+                throw new CierreException("No se pudo acutalizar los egresos", ex);
             }
         }
     }
