@@ -189,7 +189,7 @@ namespace EstacionDB.DAO
                     // Si tiene reaultados los recorre fila por fila
                     while (reader.Read())
                     {   
-                        if (reader["DIFERENCIA"] != null) dif = double.Parse(reader["DIFERENCIA"].ToString());
+                        if (reader["DIFERENCIA"] != null) dif = Utilidades.Utilidades.parsearDecimal(reader["DIFERENCIA"].ToString());
                     }
                 }
                 #endregion

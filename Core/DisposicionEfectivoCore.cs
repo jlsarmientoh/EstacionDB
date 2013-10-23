@@ -103,6 +103,11 @@ namespace EstacionDB.Core
             }
         }
 
+        /// <summary>
+        /// <para>Elimina el egreso que recibe como parámetros.</para>
+        /// </summary>
+        /// <param name="egreso">EgrestoDTO debe contener al menos el campo IdEgreso.</param>
+        /// <returns>int, número de egreso eliminados.</returns>
         public int eliminarEgreso(EgresoDTO egreso)
         {
             try
@@ -125,6 +130,11 @@ namespace EstacionDB.Core
             }
         }
 
+        /// <summary>
+        /// Guarda o actualiza los agresos que recibe como parámetro.
+        /// </summary>
+        /// <param name="egresos">IList lista de egresos.</param>
+        /// <returns>int, número de egresos guardados o actualizados</returns>
         public int guardarEgresos(IList egresos)
         {
             try

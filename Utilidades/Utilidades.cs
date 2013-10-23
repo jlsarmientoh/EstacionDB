@@ -125,7 +125,8 @@ namespace EstacionDB.Utilidades
 
         public static double parsearDecimal(string valor)
         {
-            return double.Parse(valor);
+            string formateado = valor.Replace(".", ",");
+            return double.Parse(formateado);
         }
     }
 
