@@ -128,6 +128,20 @@ namespace EstacionDB.Utilidades
             string formateado = valor.Replace(".", ",");
             return double.Parse(formateado);
         }
+
+        public static double parsearDecimal(string valor, char separadorMil)
+        {
+            char[] charArray = valor.ToCharArray();
+            StringBuilder sb = new StringBuilder();
+            foreach(char c in charArray){
+                if (c != separadorMil)
+                {
+                    sb.Append(c);
+                }
+            }
+            //string formateado = parsearDecimal(sb.ToString());
+            return parsearDecimal(sb.ToString());
+        }
     }
 
 }

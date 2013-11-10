@@ -55,5 +55,15 @@ namespace EstacionDB.DTO
             get { return fechaAplica; }
             set { fechaAplica = value; }
         }
+
+        public string ToString()
+        {
+            return "Egreso{NUMERO["+numero+"]," +
+                    "BENEFICIARIO["+beneficiario+"]" +
+                    "VALOR["+valor+"]" +
+                    "FECHA["+fecha+"]" +
+                    "FECHA_ACPLICA["+fechaAplica+"]" +
+                    "}";
+        }
     }
 }
