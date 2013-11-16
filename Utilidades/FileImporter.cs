@@ -31,9 +31,10 @@ namespace EstacionDB.Utilidades
                         //Segunda columna
                         e.Numero = long.Parse(columnas[1].Trim());
                         //Tercera columna
-                        e.FechaAplica = DateTime.Parse(columnas[2].Trim());
+                        //e.FechaAplica = DateTime.Parse(columnas[2].Trim());
                         //Quinta columna
-                        e.Valor = Utilidades.parsearDecimal(columnas[6].Trim(), ',');                        
+                        e.Valor = Utilidades.parsearDecimal(columnas[3].Trim(), ',');
+                        egresos.Add(e);
                     }
                 }
             }

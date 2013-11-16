@@ -162,5 +162,20 @@ namespace EstacionDB.Core
                 throw new CierreException("No se pudo acutalizar los egresos", ex);
             }
         }
+
+        public void validarEgreso(EgresoDTO dto)
+        {
+            EgresoVO vo = egresosDAO.consultarEgreso(dto.Numero);
+
+            if (vo == null)
+            {
+                throw new CierreException("Egreso # " + dto.Numero + ", no existe");
+            }
+
+            if (vo.Valor.CompareTo(dto.Valor) != 0)
+            {
+                throw new CierreException("Egreso # " + dto.Numero + ", diferencia de valor");
+            }
+        }
     }
 }

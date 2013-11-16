@@ -13,7 +13,28 @@ namespace EstacionDB.DAO
 {
     public class EgresosDAO
     {
-        
+
+        public EgresoVO consultarEgreso(long documento)
+        {
+            EgresoVO egreso;
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(EgresoVO))
+                    .Add(Expression.Eq("Documento", documento));
+
+                egreso = criteria.UniqueResult<EgresoVO>();
+
+                ConnectionHelper.CloseSession();
+
+                return egreso;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la vista egresos.", ex);
+            }
+        }
+
         public List<EgresoVO> consultarEgresosFecha(DateTime fecha1, DateTime fecha2)
         {
             List<EgresoVO> egresos = new List<EgresoVO>();
