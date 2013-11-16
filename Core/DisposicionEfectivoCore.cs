@@ -176,6 +176,11 @@ namespace EstacionDB.Core
             {
                 throw new CierreException("Egreso # " + dto.Numero + ", diferencia de valor");
             }
+
+            if (vo.FechaAplica.CompareTo(dto.FechaAplica) != 0)
+            {
+                throw new CierreException("Egreso # " + dto.Numero + ", fechas no coninciden");
+            }
         }
     }
 }

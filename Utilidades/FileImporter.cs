@@ -4,6 +4,7 @@ using System.Text;
 using EstacionDB.DTO;
 using System.IO;
 using System.Collections;
+using System.Globalization;
 
 namespace EstacionDB.Utilidades
 {
@@ -31,9 +32,9 @@ namespace EstacionDB.Utilidades
                         //Segunda columna
                         e.Numero = long.Parse(columnas[1].Trim());
                         //Tercera columna
-                        //e.FechaAplica = DateTime.Parse(columnas[2].Trim());
+                        e.FechaAplica = DateTime.ParseExact(columnas[2].Trim(), "yyyy/dd/MM", CultureInfo.InvariantCulture);
                         //Quinta columna
-                        e.Valor = Utilidades.parsearDecimal(columnas[3].Trim(), ',');
+                        e.Valor = Utilidades.parsearDecimal(columnas[6].Trim(), ',');
                         egresos.Add(e);
                     }
                 }
