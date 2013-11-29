@@ -169,17 +169,19 @@ namespace EstacionDB.Core
 
             if (vo == null)
             {
-                throw new CierreException("Egreso # " + dto.Numero + ", no existe");
+                throw new CierreException("Egreso # " + dto.Numero + ".  No existe");
             }
 
             if (vo.Valor.CompareTo(dto.Valor) != 0)
             {
-                throw new CierreException("Egreso # " + dto.Numero + ", diferencia de valor");
+                throw new CierreException("Egreso # " + dto.Numero + ".  Diferencia de valor");
             }
+            DateTime fechaVo = DateTime.Parse(vo.FechaAplica.ToString("yyyy/MM/dd"));
+            DateTime fechaDto = DateTime.Parse(dto.FechaAplica.ToString("yyyy/MM/dd"));
 
-            if (vo.FechaAplica.CompareTo(dto.FechaAplica) != 0)
+            if (fechaVo.CompareTo(fechaDto) != 0)
             {
-                throw new CierreException("Egreso # " + dto.Numero + ", fechas no coninciden");
+                throw new CierreException("Egreso # " + dto.Numero + ".  Fechas no coninciden");
             }
         }
     }

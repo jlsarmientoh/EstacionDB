@@ -14,13 +14,13 @@ namespace EstacionDB.DAO
     public class EgresosDAO
     {
 
-        public EgresoVO consultarEgreso(long documento)
+        public EgresoVO consultarEgreso(long numero)
         {
             EgresoVO egreso;
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(EgresoVO))
-                    .Add(Expression.Eq("Documento", documento));
+                    .Add(Expression.Eq("Numero", numero));
 
                 egreso = criteria.UniqueResult<EgresoVO>();
 

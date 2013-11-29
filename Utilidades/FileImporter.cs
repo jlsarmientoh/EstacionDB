@@ -31,7 +31,7 @@ namespace EstacionDB.Utilidades
                         e.TipoDocumento = 1;
                         //Segunda columna
                         e.Numero = long.Parse(columnas[1].Trim());
-                        //Tercera columna
+                        //Tercera columna                        
                         e.FechaAplica = DateTime.ParseExact(columnas[2].Trim(), "yyyy/dd/MM", CultureInfo.InvariantCulture);
                         //Quinta columna
                         e.Valor = Utilidades.parsearDecimal(columnas[6].Trim(), ',');
@@ -41,9 +41,9 @@ namespace EstacionDB.Utilidades
             }
             objReader.Close();
 
-            foreach (EgresoDTO sOutput in egresos)
+            /*foreach (EgresoDTO sOutput in egresos)
                 Console.WriteLine(sOutput.ToString());
-            Console.ReadLine();
+            Console.ReadLine();*/
 
             return egresos;
         }
