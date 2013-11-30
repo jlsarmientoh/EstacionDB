@@ -162,7 +162,12 @@ namespace EstacionDB.Core
                 throw new CierreException("No se pudo acutalizar los egresos", ex);
             }
         }
-
+        /// <summary>
+        /// <para>Compara la información del egreso contenida en el DTO con la información
+        /// registrada.  En caso de inconsistencia lanza una excepción de tipo
+        /// CierreException con la respectiva descripción.</para>
+        /// </summary>
+        /// <param name="dto">EgresoDTO DTO con los datos a validar</param>
         public void validarEgreso(EgresoDTO dto)
         {
             EgresoVO vo = egresosDAO.consultarEgreso(dto.Numero);
@@ -174,14 +179,18 @@ namespace EstacionDB.Core
 
             if (vo.Valor.CompareTo(dto.Valor) != 0)
             {
-                throw new CierreException("Egreso # " + dto.Numero + ".  Diferencia de valor");
+                throw new CierreException("Egreso # " + dto.Numero + ".  Diferencia de valor: [Registrado : "
+                    + Utilidades.Utilidades.formatearDecimal(vo.Valor) + "][Archivo : "
+                    + Utilidades.Utilidades.formatearDecimal(dto.Valor) + "]");
             }
             DateTime fechaVo = DateTime.Parse(vo.FechaAplica.ToString("yyyy/MM/dd"));
             DateTime fechaDto = DateTime.Parse(dto.FechaAplica.ToString("yyyy/MM/dd"));
 
             if (fechaVo.CompareTo(fechaDto) != 0)
             {
-                throw new CierreException("Egreso # " + dto.Numero + ".  Fechas no coninciden");
+                throw new CierreException("Egreso # " + dto.Numero + ".  Fechas no coninciden: [Registrado : ]"
+                    + fechaVo.ToShortDateString() + "][Archivo : "
+                    + fechaDto.ToShortDateString() + "]");
             }
         }
     }

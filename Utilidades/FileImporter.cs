@@ -41,10 +41,6 @@ namespace EstacionDB.Utilidades
             }
             objReader.Close();
 
-            /*foreach (EgresoDTO sOutput in egresos)
-                Console.WriteLine(sOutput.ToString());
-            Console.ReadLine();*/
-
             return egresos;
         }
     }
