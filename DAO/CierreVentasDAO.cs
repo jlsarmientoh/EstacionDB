@@ -173,7 +173,7 @@ namespace EstacionDB.DAO
             double total = 0;
             try
             {
-                string sqlQuery = "Select sum(c." + medio + ") From EstacionDB.VO.CierreVentasVO c Where Fecha Between :Fecha1 And :Fecha2";
+                string sqlQuery = "Select sum(c." + medio + ") From EstacionDB.VO.CierreVentasVO c Where c.Fecha Between :Fecha1 And :Fecha2";
                 IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
                 query.SetParameter("Fecha1", fecha1);
                 query.SetParameter("Fecha2", fecha2);

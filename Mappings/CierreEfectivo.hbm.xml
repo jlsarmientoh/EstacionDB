@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="EstacionDB">
+  <class name="EstacionDB.VO.CierreEfectivoVO" table="CIERRE_EFECTIVO">
+    <id name="IdCierre">
+      <column name="ID_CIERRE" sql-type="bigint" not-null="true"/>
+      <generator class="identity"/>
+    </id>
+    <property name="Fecha">
+      <column name="FECHA"/>
+    </property>
+    <property name="Efectivo">
+      <column name="EFECTIVO"/>
+    </property>
+    <property name="Egresos">
+      <column name="EGRESOS"/>
+    </property>
+    <property name="Estado">
+      <column name="ESTADO"/>
+    </property>    
+  </class>
+</hibernate-mapping>

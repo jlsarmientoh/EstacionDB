@@ -16,7 +16,7 @@ namespace EstacionDB.Core
         private EgresosDAO egresosDAO;
         private CierreVentasDAO cierresDAO;
         //Constructor
-        public DisposicionEfectivoCore()
+        private DisposicionEfectivoCore()
         {
             egresosDAO = new EgresosDAO();
             cierresDAO = new CierreVentasDAO();
