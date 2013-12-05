@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\CierreEfectivoCore.cs" />
+    <Compile Include="Core\ControlTanquesCore.cs" />
     <Compile Include="Core\DisposicionEfectivoCore.cs" />
     <Compile Include="Core\UsuarioCore.cs" />
     <Compile Include="DAO\BancosDAO.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="DTO\UsuarioDTO.cs" />
     <Compile Include="DTO\WorkStatusDTO.cs" />
     <Compile Include="Exceptions\CierreException.cs" />
+    <Compile Include="Exceptions\ControlCombustibleException.cs" />
     <Compile Include="Exceptions\EstacionDBException.cs" />
     <Compile Include="Exceptions\UsuarioException.cs" />
     <Compile Include="Exceptions\PersistenciaException.cs" />

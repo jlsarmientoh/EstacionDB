@@ -85,6 +85,28 @@ namespace EstacionDB.DAO
             }
         }
 
+        public ControlCombustibleVO consultarControl(int idProducto, DateTime fecha)
+        {
+            ControlCombustibleVO control = null;
+            try
+            {
+                ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(ControlCombustibleVO))
+                    .Add(Expression.Between("Fecha", fecha, fecha))
+                    .Add(Expression.Eq("IdProducto", idProducto));
+
+                control = criteria.UniqueResult<ControlCombustibleVO>();
+                
+                ConnectionHelper.CloseSession();
+
+                return control;
+            }
+            catch (System.Exception ex)
+            {
+                ConnectionHelper.CloseSession();
+                throw new EstacionDBException("Error al leer la información de la tabla control combustible.", ex);
+            }
+        }
+
         public int guardarControlCombustible(ControlCombustibleVO cc)
         {
             int rows = 0;
