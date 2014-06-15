@@ -34,7 +34,7 @@ namespace EstacionDB.Utilidades
                         //Tercera columna                        
                         e.FechaAplica = DateTime.ParseExact(columnas[2].Trim(), "yyyy/dd/MM", CultureInfo.InvariantCulture);
                         //Quinta columna
-                        e.Valor = Utilidades.parsearDecimal(columnas[6].Trim(), ',');
+                        e.Valor = Utilidades.parsearDecimal(columnas[3].Trim(), ',');
                         egresos.Add(e);
                     }
                 }

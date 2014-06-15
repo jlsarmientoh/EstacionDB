@@ -7,6 +7,7 @@ using EstacionDB.VO;
 using EstacionDB.Exceptions;
 using System.Collections;
 using NHibernate;
+using NHibernate.Driver;
 using NHibernate.Criterion;
 
 namespace EstacionDB.DAO
@@ -356,16 +357,17 @@ namespace EstacionDB.DAO
             }
         }
 
-        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2, string nit, long modoPago)
+        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2, string nit, string codigo,long modoPago)
         {
             List<VentaVO> ventas = new List<VentaVO>();
             try
             {
-                string sqlQuery = "Select v.Nit, sum(v.Total), v.ModoPago, v.Producto From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And Nit = :Nit And ModoPago = :ModoPago Group By v.Nit, v.Producto,v.ModoPago";
+                string sqlQuery = "Select v.Nit, sum(v.Total), v.ModoPago, v.Producto From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And (Nit = :Nit Or Nit = :Codigo) And ModoPago = :ModoPago Group By v.Nit, v.Producto,v.ModoPago";
                 IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
                 query.SetParameter("Fecha1", fecha1);
                 query.SetParameter("Fecha2", fecha2);
                 query.SetParameter("Nit", nit);
+                query.SetParameter("Codigo", codigo);
                 query.SetParameter("ModoPago", modoPago);
                 IList tmp = query.List();
 
@@ -375,7 +377,7 @@ namespace EstacionDB.DAO
                     v.Nit = venta[0].ToString();
                     v.Total = double.Parse(venta[1].ToString());
                     v.ModoPago = long.Parse(venta[2].ToString());
-                    v.Producto = venta[3].ToString();
+                    v.Producto = venta[3].ToString().Trim();
                     ventas.Add(v);
                 }
 
@@ -391,16 +393,17 @@ namespace EstacionDB.DAO
             }
         }
 
-        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2, string nit)
+        public List<VentaVO> consultarVentasAgrupadas(DateTime fecha1, DateTime fecha2, string nit, string codigo)
         {
             List<VentaVO> ventas = new List<VentaVO>();
             try
             {
-                string sqlQuery = "Select v.Nit, sum(v.Total), v.Producto From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And Nit = :Nit Group By v.Nit, v.Producto";
+                string sqlQuery = "Select v.Nit, sum(v.Total), v.Producto From EstacionDB.VO.VentaVO v Where Fecha Between :Fecha1 And :Fecha2 And (Nit = :Nit Or Nit = :Codigo) Group By v.Nit, v.Producto";
                 IQuery query = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateQuery(sqlQuery);
                 query.SetParameter("Fecha1", fecha1);
                 query.SetParameter("Fecha2", fecha2);
-                query.SetParameter("Nit", nit);                
+                query.SetParameter("Nit", nit);
+                query.SetParameter("Codigo", codigo);
                 IList tmp = query.List();
 
                 foreach (object[] venta in tmp)
@@ -424,14 +427,15 @@ namespace EstacionDB.DAO
             }
         }
 
-        public List<VentaVO> consultarVentasCliente(DateTime fecha1, DateTime fecha2, string nit)
+        public List<VentaVO> consultarVentasCliente(DateTime fecha1, DateTime fecha2, string nit, string codigo)
         {
             List<VentaVO> ventas = new List<VentaVO>();
             try
             {
                 ICriteria criteria = ConnectionHelper.getCurrentSession(Utilidades.Utilidades.configExpo).CreateCriteria(typeof(VentaVO))
                     .Add(Expression.Between("Fecha", fecha1, fecha2))
-                    .Add(Expression.Eq("Nit", nit));
+                    .Add(Expression.Disjunction().Add(Expression.Eq("Nit", nit)).Add(Expression.Eq("Nit", codigo)));
+                    //.Add(Expression.Eq("Nit", nit));
                 IList tmp = criteria.List();
 
                 foreach (VentaVO venta in tmp)

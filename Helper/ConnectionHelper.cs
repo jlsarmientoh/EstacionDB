@@ -54,7 +54,7 @@ namespace EstacionDB.Helper
                 return currentSession;
             }
             catch (Exception ex)
-            {
+            {   
                 if (currentSession != null)
                 {
                     currentSession.Close();

@@ -107,5 +107,15 @@ namespace EstacionDB.VO
             get { return galones; }
             set { galones = value; }
         }
+
+        private double descuento;
+
+        public virtual double Descuento
+        {
+            get { return descuento; }
+            set { descuento = value; }
+        }
+
+
     }
 }
